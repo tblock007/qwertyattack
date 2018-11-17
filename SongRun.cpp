@@ -47,6 +47,22 @@ void SongRun::playMusic(std::mutex& m, std::condition_variable& cv, bool& play) 
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
 void SongRun::run(sf::RenderWindow& window) {
+
+	window.clear(sf::Color::White);
+	sf::Font font;
+	if (!font.loadFromFile("resources/sansation.ttf")) {
+		std::cout << "ERROR!" << std::endl;
+		std::cin.get();
+	}
+	sf::Text loadingText;
+	loadingText.setFont(font);
+	loadingText.setString("Loading...");
+	loadingText.setCharacterSize(100);
+	loadingText.setFillColor(sf::Color::Black);
+	loadingText.setPosition(10, 10);
+	window.draw(loadingText);
+
+
 	std::condition_variable cv;
 	std::mutex m;
 	bool play = false;
@@ -73,9 +89,9 @@ void SongRun::run(sf::RenderWindow& window) {
 	}
 
 	// load the keynotes -  for now we will generate
-	std::vector<KeyNote> keynotes;
+	std::vector<std::shared_ptr<KeyNote>> keynotes;
 	for (int i = 0; i < 26; i++) {
-		keynotes.emplace_back(i + 'A', 0.0005f, 2000000 + 500000 * (i + 1), pulseTextures);
+		keynotes.emplace_back(std::make_shared<BasicKeyNote>(i + 'A', 0.0005f, 2000000 + 500000 * (i + 1), pulseTextures));
 	}
 
 	std::bitset<26> pressed;
@@ -115,22 +131,12 @@ void SongRun::run(sf::RenderWindow& window) {
 
 		window.clear(sf::Color::White);
 		window.draw(zone);
-		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](KeyNote const& kn) { return (kn.getState() == KeyNote::State::DEAD); }), keynotes.end());
-		for (auto& kn : keynotes) {
-			if (kn.getState() == KeyNote::State::SCROLLING) {
-
-				if (kn.getPosition().x < -80) {
-					kn.kill();
-				}
-				else if (pressed.test(kn.getKey() - 'A') && kn.getPosition().x >= 10 && kn.getPosition().x <= 70) {
-					kn.hit(overallClock.getElapsedTime().asMicroseconds(), explodeTextures);
-				}
-				else {
-					kn.move(-1 * 80.0f / 125000.0f * dt, 0);
-				}
-			}
-			kn.updateFrame(overallClock.getElapsedTime().asMicroseconds());
-			window.draw(kn);
+		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNote::State::DEAD); }), keynotes.end());
+		for (auto kn : keynotes) {
+			
+			kn->sendKey(pressed, overallClock.getElapsedTime().asMicroseconds(), explodeTextures);
+			kn->updateFrame(overallClock.getElapsedTime().asMicroseconds());
+			window.draw(*kn);
 		}
 
 		window.display();
