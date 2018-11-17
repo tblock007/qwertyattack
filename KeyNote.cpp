@@ -10,7 +10,7 @@
 /// <param name="pulseTextures">The map of textures from which to load the "pulse" animation
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
-KeyNote::KeyNote(char c, TextureMap const& pulseTextures) : _state(KeyNote::State::SCROLLING), _key(c) {
+KeyNote::KeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures) : _state(KeyNote::State::SCROLLING), _key(c), _speed(speed), _targetHitTime(targetHitTime) {
 	switch (c) {
 	case 'Q':
 	case 'W':
@@ -51,7 +51,8 @@ KeyNote::KeyNote(char c, TextureMap const& pulseTextures) : _state(KeyNote::Stat
 	
 	_image.setTexture(pulseTextures.at(std::string(1, _key)));
 	_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
-	_image.setPosition(1200.0f, 100.0f + (_track * 150.0f));
+	_y = 100.0f + (_track * 150.0f);
+	_image.setPosition(1200.0f, _y);
 
 	_microsecondsPerFrame = 16667;
 }
@@ -149,10 +150,12 @@ void KeyNote::move(float dx, float dy) {
 // ********************************************************************************
 void KeyNote::updateFrame(sf::Int64 timeElapsed) {
 	if (_state == State::SCROLLING) {
+		_image.setPosition((_targetHitTime - timeElapsed) * _speed + zoneLeftBound, _y);
 		sf::Int32 frame = (static_cast<sf::Int32>(timeElapsed / _microsecondsPerFrame)) % pulseFrames;
 		_image.setTextureRect(sf::IntRect(leftOffset, topOffset + frame * pixelsBetweenSprites, width, height));
 	}
 	else if (_state == State::HIT) {
+		_image.setPosition(zoneLeftBound, _y);
 		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / _microsecondsPerFrame));
 		if (frame >= explodeFrames) {
 			_state = State::DEAD;

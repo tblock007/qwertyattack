@@ -14,7 +14,7 @@ public:
 	using TextureMap = std::unordered_map<std::string, sf::Texture>;
 	enum class State { SCROLLING, HIT, DEAD };
 
-	KeyNote(char c, TextureMap const& pulseTextures);
+	KeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures);
 
 	char getKey() const;
 	State getState() const;
@@ -27,19 +27,25 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	static sf::Int32 const width = 80;
-	static sf::Int32 const height = 80;
-	static sf::Int32 const leftOffset = 25;
-	static sf::Int32 const topOffset = 24;
-	static sf::Int32 const pixelsBetweenSprites = 128;
-	static sf::Int32 const pulseFrames = 125;
-	static sf::Int32 const explodeFrames = 37;
+	static sf::Int32 constexpr width = 80;
+	static sf::Int32 constexpr height = 80;
+	static sf::Int32 constexpr leftOffset = 25;
+	static sf::Int32 constexpr topOffset = 24;
+	static sf::Int32 constexpr pixelsBetweenSprites = 128;
+	static sf::Int32 constexpr pulseFrames = 125;
+	static sf::Int32 constexpr explodeFrames = 37;
+	static float constexpr zoneLeftBound = 40.0f;
 
 	State _state;
 	char _key;
+
+	float _speed;
+	float _y;
+
 	sf::Sprite _image;
 	sf::Int32 _track;	
 	sf::Int64 _microsecondsPerFrame;
 	sf::Int64 _hitTime;
+	sf::Int64 _targetHitTime;
 
 };

@@ -72,7 +72,12 @@ void SongRun::run(sf::RenderWindow& window) {
 		explodeTextures[std::string(1, c)].loadFromFile("resources/keynotes/" + std::string(1, c) + "_keynote_explode.png");
 	}
 
+	// load the keynotes -  for now we will generate
 	std::vector<KeyNote> keynotes;
+	for (int i = 0; i < 26; i++) {
+		keynotes.emplace_back(i + 'A', 0.0005f, 2000000 + 500000 * (i + 1), pulseTextures);
+	}
+
 	std::bitset<26> pressed;
 	sf::Clock frameClock;
 	sf::Clock overallClock;
@@ -107,9 +112,6 @@ void SongRun::run(sf::RenderWindow& window) {
 		float fps = 1000000.0f / dt;
 		std::cout << "FPS: " << std::to_string(fps) << std::endl;
 
-		if (frameCounter % 30 == 0) {
-			keynotes.emplace_back((std::rand() % 26) + 'A', pulseTextures);
-		}
 
 		window.clear(sf::Color::White);
 		window.draw(zone);
