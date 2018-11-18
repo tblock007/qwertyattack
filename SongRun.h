@@ -18,6 +18,4 @@
 class SongRun {
 public:
 	void run(sf::RenderWindow& window);
-private:
-	void playMusic(std::mutex& m, std::condition_variable& cv, bool& play);
 };
