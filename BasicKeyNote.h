@@ -1,3 +1,4 @@
+#pragma once
 #include <bitset>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
