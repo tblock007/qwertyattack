@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdlib>
-#include <ctime>
 #include <bitset>
 #include <future>
 #include <iostream>
@@ -8,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "BasicKeyNote.h"
+#include "KeyChart.h"
 
 // --------------------------------------------------------------------------------
 /// <summary>

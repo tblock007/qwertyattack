@@ -23,12 +23,7 @@ void SongRun::run(sf::RenderWindow& window) {
 	
 	sf::Music music;
 	music.openFromFile("resources/bpm_115_5.flac");
-	float bpm = 115.5;
-	float defaultSpeed = 0.0005f;
-	sf::Int64 microsecondOffset = 1840000;
-	sf::Int64 microsecondsPerBeat = static_cast<sf::Int64>(60000000.0f / bpm);
-	std::srand(std::time(nullptr));
-
+	
 	// load the textures into memory
 	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure
 	for (char c = 'A'; c <= 'Z'; c++) {
@@ -40,11 +35,9 @@ void SongRun::run(sf::RenderWindow& window) {
 		explodeTextures[std::string(1, c)].loadFromFile("resources/keynotes/" + std::string(1, c) + "_keynote_explode.png");
 	}
 
-	// load the keynotes -  for now we will generate
+	KeyChart chart;
+	chart.loadFromFile("unused_for_now", pulseTextures);
 	std::vector<std::shared_ptr<KeyNote>> keynotes;
-	for (int i = 0; i < 100; i++) {
-		keynotes.emplace_back(std::make_shared<BasicKeyNote>((std::rand() % 26) + 'A', defaultSpeed, microsecondOffset + (microsecondsPerBeat / 2) * (i + 1), pulseTextures));
-	}
 	
 	sf::Texture bgTexture;
 	bgTexture.loadFromFile("resources/bg.png");
@@ -91,11 +84,18 @@ void SongRun::run(sf::RenderWindow& window) {
 		window.clear();
 		window.draw(bg);
 		window.draw(fpsText);
+		
+		sf::Int64 overallTime = overallClock.getElapsedTime().asMicroseconds();
+		std::optional<std::shared_ptr<KeyNote>> toBeAdded;
+		while (toBeAdded = chart.getKeyNote(overallTime)) {
+			keynotes.push_back(toBeAdded.value());
+		}
+
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNote::State::DEAD); }), keynotes.end());
 		for (auto kn : keynotes) {
 			
-			kn->sendKey(pressed, overallClock.getElapsedTime().asMicroseconds(), explodeTextures);
-			kn->updateFrame(overallClock.getElapsedTime().asMicroseconds());
+			kn->sendKey(pressed, overallTime, explodeTextures);
+			kn->updateFrame(overallTime);
 			window.draw(*kn);
 		}
 
