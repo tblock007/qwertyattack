@@ -8,6 +8,7 @@ While the primary aim of QWERTY Attack is entertainment, we recognize the educat
 
 ## Build Instructions and Dependencies
 
+* C++ 17
 * SFML 2.5.1
 
 Use the included CMakeLists_reference.txt to create a CMake project.  Set include and lib directories to the location of the include files and SFML library files.
