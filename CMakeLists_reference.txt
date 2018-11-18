@@ -7,6 +7,8 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-build-release/)
 set(SOURCE_FILES 
 	BasicKeyNote.h
 	BasicKeyNote.cpp
+	KeyChart.h
+	KeyChart.cpp
 	KeyNote.h
 	SongRun.h
 	SongRun.cpp)
