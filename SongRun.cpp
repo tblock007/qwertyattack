@@ -1,42 +1,6 @@
 #include "SongRun.h"
 
 
-// ********************************************************************************
-/// <summary>
-/// Example callback for playing music
-/// </summary>
-/// <param name="m">Mutex associated with the flag variable <c>play</c></param>
-/// <param name="cv">Condition variable used to signal this function to start playing music</param>
-/// <param name="play">Flag variable used to indicate whether the function should play music</param>
-/// <changed>tblock,11/15/2018</changed>
-// ********************************************************************************
-void SongRun::playMusic(std::mutex& m, std::condition_variable& cv, bool& play) {
-
-	// Load an flac music file
-	sf::Music music;
-	if (!music.openFromFile("resources/song.flac"))
-		return;
-
-	// Play it
-	std::unique_lock<std::mutex> ul(m);
-	cv.wait(ul, [&]() { return play; }); 
-	ul.unlock();
-
-	music.play();
-
-	// Loop while the music is playing
-	while (music.getStatus() == sf::Music::Playing)
-	{
-		// Leave some CPU time for other processes
-		sf::sleep(sf::milliseconds(100));
-
-		if (!play) {
-			break;
-		}
-	}
-
-}
-
 
 
 // ********************************************************************************
@@ -47,14 +11,14 @@ void SongRun::playMusic(std::mutex& m, std::condition_variable& cv, bool& play) 
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
 void SongRun::run(sf::RenderWindow& window) {
-
-	std::condition_variable cv;
-	std::mutex m;
-	bool play = false;
-
-	//auto fut = std::async(std::launch::async, SongRun::playMusic, std::ref(m), std::ref(cv), std::ref(play));
-
 	
+	sf::Music music;
+	music.openFromFile("resources/bpm_115_5.flac");
+	float bpm = 115.5;
+	float defaultSpeed = 0.0005f;
+	sf::Int64 microsecondOffset = 1840000;
+	sf::Int64 microsecondsPerBeat = static_cast<sf::Int64>(60000000.0f / bpm);
+	std::srand(std::time(nullptr));
 
 	// load the textures into memory
 	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure
@@ -69,11 +33,10 @@ void SongRun::run(sf::RenderWindow& window) {
 
 	// load the keynotes -  for now we will generate
 	std::vector<std::shared_ptr<KeyNote>> keynotes;
-	for (int i = 0; i < 26; i++) {
-		keynotes.emplace_back(std::make_shared<BasicKeyNote>(i + 'A', 0.0005f, 2000000 + 500000 * (i + 1), pulseTextures));
+	for (int i = 0; i < 100; i++) {
+		keynotes.emplace_back(std::make_shared<BasicKeyNote>((std::rand() % 26) + 'A', defaultSpeed, microsecondOffset + (microsecondsPerBeat / 2) * (i + 1), pulseTextures));
 	}
-
-
+	
 	sf::Texture bgTexture;
 	bgTexture.loadFromFile("resources/bg.png");
 	sf::Sprite bg;
@@ -84,25 +47,23 @@ void SongRun::run(sf::RenderWindow& window) {
 	sf::Clock frameClock;
 	sf::Clock overallClock;
 	int frameCounter = 0;
-
-	cv.notify_one();
-
-	// Start the game loop
+	
+	// play music and start the game loop
+	music.play();
 	while (window.isOpen())
 	{
-		// Process events
+		// handle all events that occurred this frame
 		sf::Event event;
 		pressed.reset();
 		while (window.pollEvent(event))
 		{
-			// Close window: exit
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
 
-			// Handle key presses
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) {
+					music.stop();
 					window.close();
 				}
 

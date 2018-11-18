@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <ctime>
 #include <bitset>
 #include <future>
 #include <iostream>
