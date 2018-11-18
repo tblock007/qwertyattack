@@ -36,7 +36,7 @@ void SongRun::run(sf::RenderWindow& window) {
 	}
 
 	KeyChart chart;
-	chart.loadFromFile("unused_for_now", pulseTextures);
+	chart.importFile("resources/keycharts/song.kc", pulseTextures);
 	std::vector<std::shared_ptr<KeyNote>> keynotes;
 	
 	sf::Texture bgTexture;
