@@ -25,7 +25,7 @@ void SongRun::run(sf::RenderWindow& window) {
 	music.openFromFile("resources/bpm_115_5.flac");
 	
 	// load the textures into memory
-	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure
+	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure, or place all letters onto one Texture and 2D index into it
 	for (char c = 'A'; c <= 'Z'; c++) {
 		pulseTextures[std::string(1, c)].loadFromFile("resources/keynotes/" + std::string(1, c) + "_keynote_pulse.png");
 	}

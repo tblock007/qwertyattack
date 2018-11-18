@@ -1,18 +1,39 @@
 #include "KeyChart.h"
 
 
+// ********************************************************************************
+/// <summary>
+/// Getter method for title of the KeyChart
+/// </summary>
+/// <returns>The title of the KeyChart</returns>
+/// <changed>tblock,11/18/2018</changed>
+// ********************************************************************************
 std::string KeyChart::getTitle() const {
 	return _title;
 }
 
 
 
+// ********************************************************************************
+/// <summary>
+/// Getter method for the artist of the KeyChart
+/// </summary>
+/// <returns>The artist of the KeyChart</returns>
+/// <changed>tblock,11/18/2018</changed>
+// ********************************************************************************
 std::string KeyChart::getArtist() const {
 	return _artist;
 }
 
 
 
+// ********************************************************************************
+/// <summary>
+/// Getter method for the genre of the KeyChart
+/// </summary>
+/// <returns>The genre of the KeyChart</returns>
+/// <changed>tblock,11/18/2018</changed>
+// ********************************************************************************
 std::string KeyChart::getGenre() const {
 	return _genre;
 }
@@ -88,20 +109,6 @@ void KeyChart::importFile(std::string fileName, KeyNote::TextureMap& pulseTextur
 			}
 		}
 	}
-
-
-	//float bpm = 115.5;
-	//float defaultSpeed = 0.0005f; // pixels/us
-	//sf::Int64 microsecondOffset = 1840000;
-	//sf::Int64 microsecondsPerBeat = static_cast<sf::Int64>(60000000.0f / bpm);
-	//std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-	//// load the keynotes -  for now we will generate
-	//for (int i = 0; i < 100; i++) {
-	//	sf::Int64 targetHitTime = microsecondOffset + (microsecondsPerBeat / 2) * (i + 1);
-	//	sf::Int64 offscreenLoadTime = targetHitTime - static_cast<sf::Int64>((fullscreenWidth + pixelThreshold) / defaultSpeed);
-	//	_keyNoteQueue.emplace(offscreenLoadTime, std::make_shared<BasicKeyNote>((std::rand() % 26) + 'A', defaultSpeed, targetHitTime, pulseTextures));
-	//}
 }
 
 
@@ -130,6 +137,15 @@ std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElaps
 
 
 
+// ********************************************************************************
+/// <summary>
+/// Auxiliary function for retrieving an entire section of a .kc file from an input file stream
+/// </summary>
+/// <param name="sectionName">The section to retrieve (case sensitive)</param>
+/// <param name="fin">The input file stream from which to fetch the section</param>
+/// <returns>A vector of lines with all the contents of the requested section</returns>
+/// <changed>tblock,11/18/2018</changed>
+// ********************************************************************************
 std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, std::ifstream& fin) {
 	
 	std::vector<std::string> result;
