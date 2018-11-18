@@ -11,6 +11,15 @@
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
 void SongRun::run(sf::RenderWindow& window) {
+
+	sf::Font fpsFont;
+	fpsFont.loadFromFile("resources/sansation.ttf");
+	sf::Text fpsText;
+	fpsText.setFont(fpsFont);
+	fpsText.setString("FPS: ?");
+	fpsText.setFillColor(sf::Color::Black);
+	fpsText.setCharacterSize(20);
+	fpsText.setPosition(5.0f, 5.0f);
 	
 	sf::Music music;
 	music.openFromFile("resources/bpm_115_5.flac");
@@ -75,10 +84,13 @@ void SongRun::run(sf::RenderWindow& window) {
 
 		auto dt = frameClock.restart().asMicroseconds();
 		float fps = 1000000.0f / dt;
-		std::cout << "FPS: " << std::to_string(fps) << std::endl;
+		if (frameCounter % 60 == 0) {
+			fpsText.setString("FPS: " + std::to_string(fps));
+		}
 
 		window.clear();
 		window.draw(bg);
+		window.draw(fpsText);
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNote::State::DEAD); }), keynotes.end());
 		for (auto kn : keynotes) {
 			
