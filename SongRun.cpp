@@ -14,12 +14,12 @@ void SongRun::playMusic(std::mutex& m, std::condition_variable& cv, bool& play) 
 
 	// Load an flac music file
 	sf::Music music;
-	if (!music.openFromFile("resources/test.flac"))
+	if (!music.openFromFile("resources/song.flac"))
 		return;
 
 	// Play it
 	std::unique_lock<std::mutex> ul(m);
-	cv.wait(ul, [&]() { return play; }); // need to deal with spurious wakeup eventually
+	cv.wait(ul, [&]() { return play; }); 
 	ul.unlock();
 
 	music.play();
@@ -48,34 +48,13 @@ void SongRun::playMusic(std::mutex& m, std::condition_variable& cv, bool& play) 
 // ********************************************************************************
 void SongRun::run(sf::RenderWindow& window) {
 
-	window.clear(sf::Color::White);
-	sf::Font font;
-	if (!font.loadFromFile("resources/sansation.ttf")) {
-		std::cout << "ERROR!" << std::endl;
-		std::cin.get();
-	}
-	sf::Text loadingText;
-	loadingText.setFont(font);
-	loadingText.setString("Loading...");
-	loadingText.setCharacterSize(100);
-	loadingText.setFillColor(sf::Color::Black);
-	loadingText.setPosition(10, 10);
-	window.draw(loadingText);
-
-
 	std::condition_variable cv;
 	std::mutex m;
 	bool play = false;
 
 	//auto fut = std::async(std::launch::async, SongRun::playMusic, std::ref(m), std::ref(cv), std::ref(play));
 
-
-	sf::RectangleShape zone;
-	zone.setSize(sf::Vector2f(80, 720));
-	zone.setOutlineThickness(-3.0);
-	zone.setOutlineColor(sf::Color::Black);
-	zone.setFillColor(sf::Color::Red);
-	zone.setPosition(40, 0);
+	
 
 	// load the textures into memory
 	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure
@@ -94,10 +73,19 @@ void SongRun::run(sf::RenderWindow& window) {
 		keynotes.emplace_back(std::make_shared<BasicKeyNote>(i + 'A', 0.0005f, 2000000 + 500000 * (i + 1), pulseTextures));
 	}
 
+
+	sf::Texture bgTexture;
+	bgTexture.loadFromFile("resources/bg.png");
+	sf::Sprite bg;
+	bg.setTexture(bgTexture);
+	bg.setPosition(0, 0);
+
 	std::bitset<26> pressed;
 	sf::Clock frameClock;
 	sf::Clock overallClock;
 	int frameCounter = 0;
+
+	cv.notify_one();
 
 	// Start the game loop
 	while (window.isOpen())
@@ -128,9 +116,8 @@ void SongRun::run(sf::RenderWindow& window) {
 		float fps = 1000000.0f / dt;
 		std::cout << "FPS: " << std::to_string(fps) << std::endl;
 
-
-		window.clear(sf::Color::White);
-		window.draw(zone);
+		window.clear();
+		window.draw(bg);
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNote::State::DEAD); }), keynotes.end());
 		for (auto kn : keynotes) {
 			
