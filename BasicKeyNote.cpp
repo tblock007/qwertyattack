@@ -81,16 +81,26 @@ KeyNote::State BasicKeyNote::getState() const {
 /// <changed>tblock,11/17/2018</changed>
 // ********************************************************************************
 void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) {
-	if (_image.getPosition().x >= zoneLeftBound - 30 && _image.getPosition().x <= zoneLeftBound + 30) { // TODO: make this zone detection nice w.r.t. frames
-		if (_state == State::SCROLLING) {
-			if (pressed.test(_key - 'A')) {
+	if (_state == State::SCROLLING) {
+		if (pressed.test(_key - 'A')) {
+
+			// compute frame differential from ideal
+			sf::Int32 diffFrame = static_cast<sf::Int32>((timeElapsed - _targetHitTime) / diffMicrosecondInterval);
+			if (diffFrame >= (-1 * diffFrameGood + 1) && diffFrame <= diffFrameGood + 1) {
 				_state = State::HIT;
 				_hitTime = timeElapsed;
 				_image.setTexture(explodeTextures.at(std::string(1, _key)));
 				_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
+
+				if (diffFrame >= (-1 * diffFrameGreat + 1) && diffFrame <= diffFrameGreat + 1) {
+					// return GREAT judgement
+				}
+				else {
+					// return GOOD judgement
+				}
 			}
 		}
-	}	
+	}
 }
 
 
@@ -114,7 +124,7 @@ void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 		}
 	}
 	else if (_state == State::HIT) {
-		_image.setPosition(zoneLeftBound, _y);
+		//_image.setPosition(zoneLeftBound, _y);
 		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / microsecondsPerFrame));
 		if (frame >= explodeFrames) {
 			_state = State::DEAD;

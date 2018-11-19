@@ -170,7 +170,7 @@ void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string
 
 // ********************************************************************************
 /// <summary>
-/// Parses the contents of the meta section of the KeyChart file to extract title, 
+/// Parses the contents of the meta section of the KeyChart file to extract song file, title, 
 /// artist, and genre information
 /// </summary>
 /// <param name="metaContents">The lines read from the meta section</param>

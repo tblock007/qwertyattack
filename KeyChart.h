@@ -27,6 +27,7 @@ private:
 	static sf::Int64 constexpr pixelThreshold = 640; // buffer half a screen of KeyNotes (technically a problem if KeyNotes start travelling too fast)
 	static sf::Int64 constexpr fullscreenWidth = 1280;
 	static float constexpr keyNoteSpeed = 0.0005f;
+
 	
 	using TimePointerPair = std::pair<sf::Int64, std::shared_ptr<KeyNote>>;
 	std::priority_queue<TimePointerPair, std::vector<TimePointerPair>, std::greater<TimePointerPair>> _keyNoteQueue;
