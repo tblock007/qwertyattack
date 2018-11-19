@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 
@@ -39,8 +40,8 @@ public:
 	virtual ~KeyNote() {}
 
 	virtual KeyNoteState getState() const = 0; // TODO: consider making this a base class non-virtual, with corresponding base class member variable
-	virtual void sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) = 0;
-	virtual void updateFrame(sf::Int64 timeElapsed) = 0;
+	virtual std::optional<Judgement> sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) = 0;
+	virtual std::optional<Judgement> updateFrame(sf::Int64 timeElapsed) = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
 };

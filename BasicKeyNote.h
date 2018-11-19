@@ -19,8 +19,8 @@ public:
 	BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures);
 	
 	KeyNoteState getState() const override;
-	void sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) override;
-	void updateFrame(sf::Int64 timeElapsed) override;
+	std::optional<Judgement> sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) override;
+	std::optional<Judgement> updateFrame(sf::Int64 timeElapsed) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

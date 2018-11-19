@@ -78,9 +78,11 @@ KeyNoteState BasicKeyNote::getState() const {
 /// <param name="pressed">A bitmask indicating which keys were pressed</param>
 /// <param name="timeElapsed">A (relative) time in microseconds that indicates when the key was pressed</param>
 /// <param name="explodeTextures">The map of textures from which to load the "explode" animation</param>
-/// <changed>tblock,11/17/2018</changed>
+/// <returns>A judgement for the key press based on timing, if applicable</returns>
+/// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
-void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) {
+std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) {
+	std::optional<Judgement> judgement;
 	if (_state == KeyNoteState::SCROLLING) {
 		if (pressed.test(_key - 'A')) {
 
@@ -93,14 +95,15 @@ void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed,
 				_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
 
 				if (diffFrame >= (-1 * diffFrameGreat + 1) && diffFrame <= diffFrameGreat + 1) {
-					// return GREAT judgement
+					judgement = Judgement::GREAT;
 				}
 				else {
-					// return GOOD judgement
+					judgement = Judgement::GOOD;
 				}
 			}
 		}
 	}
+	return judgement;
 }
 
 
@@ -110,12 +113,15 @@ void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed,
 /// Updates the image of the BasicKeyNote to the appropriate frame of its animation.  This function handles both scrolling and hit animations.
 /// </summary>
 /// <param name="timeElapsed">A (relative) time in microseconds indicating time elapsed since some reference; used to compute frame of the hit animation, or proper position during scrolling</param>
-/// <changed>tblock,11/15/2018</changed>
+/// <returns>A MISS judgement if a note was missed, otherwise an empty optional</returns>
+/// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
-void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
+std::optional<Judgement> BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
+	std::optional<Judgement> result;
 	if (_state == KeyNoteState::SCROLLING) {
 		if (_image.getPosition().x < deathBound) {
 			_state = KeyNoteState::DEAD;
+			result = Judgement::MISS;
 		}
 		else {
 			_image.setPosition((_targetHitTime - timeElapsed) * _speed + zoneLeftBound, _y);
@@ -124,7 +130,6 @@ void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 		}
 	}
 	else if (_state == KeyNoteState::HIT) {
-		//_image.setPosition(zoneLeftBound, _y);
 		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / microsecondsPerFrame));
 		if (frame >= explodeFrames) {
 			_state = KeyNoteState::DEAD;
@@ -133,6 +138,7 @@ void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 			_image.setTextureRect(sf::IntRect(leftOffset, topOffset + frame * pixelsBetweenSprites, width, height));
 		}
 	}
+	return result;
 }
 
 

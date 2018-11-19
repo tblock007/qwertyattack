@@ -20,9 +20,16 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 	fpsText.setString("FPS: ?");
 	fpsText.setFillColor(sf::Color::Black);
 	fpsText.setCharacterSize(20);
-	fpsText.setPosition(5.0f, 5.0f);	
+	fpsText.setPosition(5.0f, 5.0f);
+
+	sf::Text scoreboardText;
+	scoreboardText.setFont(fpsFont);
+	scoreboardText.setString("Scoreboard: ");
+	scoreboardText.setFillColor(sf::Color::Black);
+	scoreboardText.setCharacterSize(20);
+	scoreboardText.setPosition(5.0f, 600.0f);
 	
-	
+	JudgementTally scoreboard;
 	
 	// load the textures into memory
 	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure, or place all letters onto one Texture and 2D index into it
@@ -97,10 +104,20 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }), keynotes.end());
 		for (auto kn : keynotes) {
 			
-			kn->sendKey(pressed, overallTime, explodeTextures);
-			kn->updateFrame(overallTime);
+			auto judgement = kn->sendKey(pressed, overallTime, explodeTextures);
+			if (judgement) {
+				scoreboard.incrementTally(judgement.value());
+			}
+			judgement = kn->updateFrame(overallTime);
+			if (judgement) {
+				scoreboard.incrementTally(judgement.value());
+			}
 			window.draw(*kn);
 		}
+
+		auto[greats, goods, misses] = scoreboard.getTallies();
+		scoreboardText.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods) + "\nMISSES: " + std::to_string(misses));
+		window.draw(scoreboardText);
 
 		window.display();
 		frameCounter++;

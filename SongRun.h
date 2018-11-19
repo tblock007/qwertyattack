@@ -6,6 +6,7 @@
 #include <SFML/Window.hpp>
 #include "common.h"
 #include "BasicKeyNote.h"
+#include "JudgementTally.h"
 #include "KeyChart.h"
 
 // --------------------------------------------------------------------------------

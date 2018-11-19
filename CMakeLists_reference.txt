@@ -8,6 +8,8 @@ set(SOURCE_FILES
 	common.h
 	BasicKeyNote.h
 	BasicKeyNote.cpp
+	JudgementTally.h
+	JudgementTally.cpp
 	KeyChart.h
 	KeyChart.cpp
 	KeyNote.h
