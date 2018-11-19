@@ -26,7 +26,7 @@ int main() {
     window.setActive();
 
 	SongRun run;
-	run.run(window);
+	run.run("resources/keycharts/megustastu.kc", window);
 
     return EXIT_SUCCESS;
 }

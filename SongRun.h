@@ -16,5 +16,5 @@
 // --------------------------------------------------------------------------------
 class SongRun {
 public:
-	void run(sf::RenderWindow& window);
+	void run(std::string keyChartFilePath, sf::RenderWindow& window);
 };

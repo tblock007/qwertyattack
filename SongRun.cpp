@@ -7,10 +7,11 @@
 /// <summary>
 /// Runs the song
 /// </summary>
+/// <param name="keyChartFilePath">The path to the file that contains KeyChart information</param>
 /// <param name="window">The RenderWindow on which to render graphics</param>
-/// <changed>tblock,11/15/2018</changed>
+/// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
-void SongRun::run(sf::RenderWindow& window) {
+void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 
 	sf::Font fpsFont;
 	fpsFont.loadFromFile("resources/sansation.ttf");
@@ -19,10 +20,9 @@ void SongRun::run(sf::RenderWindow& window) {
 	fpsText.setString("FPS: ?");
 	fpsText.setFillColor(sf::Color::Black);
 	fpsText.setCharacterSize(20);
-	fpsText.setPosition(5.0f, 5.0f);
+	fpsText.setPosition(5.0f, 5.0f);	
 	
-	sf::Music music;
-	music.openFromFile("resources/bpm_115_5.flac");
+	
 	
 	// load the textures into memory
 	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure, or place all letters onto one Texture and 2D index into it
@@ -36,7 +36,10 @@ void SongRun::run(sf::RenderWindow& window) {
 	}
 
 	KeyChart chart;
-	chart.importFile("resources/keycharts/song.kc", pulseTextures);
+	chart.importFile(keyChartFilePath, pulseTextures);
+	sf::Music music;
+	music.openFromFile("resources/songs/" + chart.getSongFile());
+	
 	std::vector<std::shared_ptr<KeyNote>> keynotes;
 	
 	sf::Texture bgTexture;

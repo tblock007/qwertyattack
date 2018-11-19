@@ -3,6 +3,19 @@
 
 // ********************************************************************************
 /// <summary>
+/// Getter method for song file of the KeyChart
+/// </summary>
+/// <returns>The song file of the KeyChart</returns>
+/// <changed>tblock,11/18/2018</changed>
+// ********************************************************************************
+std::string KeyChart::getSongFile() const {
+	return _songFile;
+}
+
+
+
+// ********************************************************************************
+/// <summary>
 /// Getter method for title of the KeyChart
 /// </summary>
 /// <returns>The title of the KeyChart</returns>
@@ -55,7 +68,7 @@ void KeyChart::importFile(std::string fileName, KeyNote::TextureMap const& pulse
 	auto readableContents = getSectionContents("readable", keyChartFile);
 	auto importableContents = getSectionContents("importable", keyChartFile);
 
-	std::tie(_title, _artist, _genre) = parseMeta(metaContents);
+	std::tie(_songFile, _title, _artist, _genre) = parseMeta(metaContents);
 	if (importableContents.empty()) {
 		importableContents = parseReadable(readableContents);
 		rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
@@ -161,17 +174,20 @@ void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string
 /// artist, and genre information
 /// </summary>
 /// <param name="metaContents">The lines read from the meta section</param>
-/// <returns>The title, the artist, the genre</returns>
+/// <returns>The song file name, the title, the artist, the genre</returns>
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
-std::tuple<std::string, std::string, std::string> KeyChart::parseMeta(std::vector<std::string> const& metaContents) {
-	std::string title, artist, genre;
+std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMeta(std::vector<std::string> const& metaContents) {
+	std::string songFile, title, artist, genre;
 
 	for (auto const& line : metaContents) {
 		std::istringstream iss(line);
 		std::string firstToken;
 		iss >> firstToken;
-		if (firstToken == "TITLE") {
+		if (firstToken == "FILE") {
+			songFile = line.substr(5);
+		}
+		else if (firstToken == "TITLE") {
 			title = line.substr(6);
 		}
 		else if (firstToken == "ARTIST") {
@@ -181,7 +197,7 @@ std::tuple<std::string, std::string, std::string> KeyChart::parseMeta(std::vecto
 			genre = line.substr(6);
 		}
 	}
-	return { title, artist, genre };
+	return { songFile, title, artist, genre };
 }
 
 
@@ -215,7 +231,7 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const&
 			if (firstToken == "!OFFSET") {
 				float secondsOffset;
 				if (iss >> secondsOffset) {
-					microsecondTime = static_cast<sf::Int64>(secondsOffset * 1000000.0f);
+					microsecondTime = secondsOffset * 1000000.0f;
 				}
 			}
 			else if (firstToken == "!BPM") {
