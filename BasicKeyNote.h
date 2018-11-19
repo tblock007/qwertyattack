@@ -2,6 +2,7 @@
 #include <bitset>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
+#include "common.h"
 #include "KeyNote.h"
 
 
@@ -17,7 +18,7 @@ public:
 
 	BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures);
 	
-	State getState() const override;
+	KeyNoteState getState() const override;
 	void sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) override;
 	void updateFrame(sf::Int64 timeElapsed) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -25,7 +26,7 @@ public:
 private:
 
 
-	State _state;
+	KeyNoteState _state;
 	char _key;
 
 	float _speed;

@@ -12,7 +12,7 @@
 /// <param name="pulseTextures">The map of textures from which to load the "pulse" animation</param>
 /// <changed>tblock,11/17/2018</changed>
 // ********************************************************************************
-BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures) : _state(KeyNote::State::SCROLLING), _key(c), _speed(speed), _targetHitTime(targetHitTime) {
+BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures) : _state(KeyNoteState::SCROLLING), _key(c), _speed(speed), _targetHitTime(targetHitTime) {
 	switch (c) {
 	case 'Q':
 	case 'W':
@@ -64,7 +64,7 @@ BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, Texture
 /// <returns>The state of the KeyNote</returns>
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
-KeyNote::State BasicKeyNote::getState() const {
+KeyNoteState BasicKeyNote::getState() const {
 	return _state;
 }
 
@@ -81,13 +81,13 @@ KeyNote::State BasicKeyNote::getState() const {
 /// <changed>tblock,11/17/2018</changed>
 // ********************************************************************************
 void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) {
-	if (_state == State::SCROLLING) {
+	if (_state == KeyNoteState::SCROLLING) {
 		if (pressed.test(_key - 'A')) {
 
 			// compute frame differential from ideal
 			sf::Int32 diffFrame = static_cast<sf::Int32>((timeElapsed - _targetHitTime) / diffMicrosecondInterval);
 			if (diffFrame >= (-1 * diffFrameGood + 1) && diffFrame <= diffFrameGood + 1) {
-				_state = State::HIT;
+				_state = KeyNoteState::HIT;
 				_hitTime = timeElapsed;
 				_image.setTexture(explodeTextures.at(std::string(1, _key)));
 				_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
@@ -113,9 +113,9 @@ void BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed,
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
 void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
-	if (_state == State::SCROLLING) {
+	if (_state == KeyNoteState::SCROLLING) {
 		if (_image.getPosition().x < deathBound) {
-			_state = State::DEAD;
+			_state = KeyNoteState::DEAD;
 		}
 		else {
 			_image.setPosition((_targetHitTime - timeElapsed) * _speed + zoneLeftBound, _y);
@@ -123,11 +123,11 @@ void BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 			_image.setTextureRect(sf::IntRect(leftOffset, topOffset + frame * pixelsBetweenSprites, width, height));
 		}
 	}
-	else if (_state == State::HIT) {
+	else if (_state == KeyNoteState::HIT) {
 		//_image.setPosition(zoneLeftBound, _y);
 		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / microsecondsPerFrame));
 		if (frame >= explodeFrames) {
-			_state = State::DEAD;
+			_state = KeyNoteState::DEAD;
 		}
 		else {
 			_image.setTextureRect(sf::IntRect(leftOffset, topOffset + frame * pixelsBetweenSprites, width, height));

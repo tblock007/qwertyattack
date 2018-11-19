@@ -4,6 +4,7 @@
 #include <sstream>
 #include <optional>
 #include <queue>
+#include "common.h"
 #include "BasicKeyNote.h"
 
 

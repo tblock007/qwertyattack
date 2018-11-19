@@ -94,7 +94,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 			keynotes.push_back(toBeAdded.value());
 		}
 
-		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNote::State::DEAD); }), keynotes.end());
+		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }), keynotes.end());
 		for (auto kn : keynotes) {
 			
 			kn->sendKey(pressed, overallTime, explodeTextures);
