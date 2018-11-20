@@ -9,7 +9,7 @@
 /// </summary>
 /// <param name="keyChartFilePath">The path to the file that contains KeyChart information</param>
 /// <param name="window">The RenderWindow on which to render graphics</param>
-/// <changed>tblock,11/18/2018</changed>
+/// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
 void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 
@@ -30,20 +30,9 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 	scoreboardText.setPosition(5.0f, 600.0f);
 	
 	JudgementTally scoreboard;
-	
-	// load the textures into memory
-	std::unordered_map<std::string, sf::Texture> pulseTextures; // potential optimization here - use a faster data structure, or place all letters onto one Texture and 2D index into it
-	for (char c = 'A'; c <= 'Z'; c++) {
-		pulseTextures[std::string(1, c)].loadFromFile("resources/keynotes/" + std::string(1, c) + "_keynote_pulse.png");
-	}
-
-	std::unordered_map<std::string, sf::Texture> explodeTextures;
-	for (char c = 'A'; c <= 'Z'; c++) {
-		explodeTextures[std::string(1, c)].loadFromFile("resources/keynotes/" + std::string(1, c) + "_keynote_explode.png");
-	}
 
 	KeyChart chart;
-	chart.importFile(keyChartFilePath, pulseTextures);
+	chart.importFile(keyChartFilePath);
 	sf::Music music;
 	music.openFromFile("resources/songs/" + chart.getSongFile());
 	
@@ -85,26 +74,31 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 			}
 		}
 
+		// handle timing
 		auto dt = frameClock.restart().asMicroseconds();
 		float fps = 1000000.0f / dt;
 		if (frameCounter % 60 == 0) {
 			fpsText.setString("FPS: " + std::to_string(fps) + "; Active KeyNotes: " + std::to_string(keynotes.size()));
-		}
-
-		window.clear();
-		window.draw(bg);
-		window.draw(fpsText);
+		}		
 		
+		// get the KeyNotes to be added to the collection of active KeyNotes
 		sf::Int64 overallTime = overallClock.getElapsedTime().asMicroseconds();
 		std::optional<std::shared_ptr<KeyNote>> toBeAdded;
 		while (toBeAdded = chart.getKeyNote(overallTime)) {
 			keynotes.push_back(toBeAdded.value());
 		}
 
+		// remove any inactive KeyNotes from our data structure
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }), keynotes.end());
+
+		// render the frame
+		window.clear();
+		window.draw(bg);
+		window.draw(fpsText);
+
 		for (auto kn : keynotes) {
 			
-			auto judgement = kn->sendKey(pressed, overallTime, explodeTextures);
+			auto judgement = kn->sendKey(pressed, overallTime);
 			if (judgement) {
 				scoreboard.incrementTally(judgement.value());
 			}

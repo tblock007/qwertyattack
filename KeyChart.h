@@ -15,11 +15,12 @@
 // --------------------------------------------------------------------------------
 class KeyChart {
 public:
+	KeyChart();
 	std::string getSongFile() const;
 	std::string getTitle() const;
 	std::string getArtist() const;
 	std::string getGenre() const;
-	void importFile(std::string fileName, KeyNote::TextureMap const& pulseTextures);
+	void importFile(std::string fileName);
 	std::optional<std::shared_ptr<KeyNote>> getKeyNote(sf::Int64 timeElapsed);
 
 
@@ -38,6 +39,11 @@ private:
 	void rewriteKeyChartFile(std::string fileName, std::vector<std::string> const& metaContents, std::vector<std::string> const& readableContents, std::vector<std::string> const& importableContents);
 	std::tuple<std::string, std::string, std::string, std::string> parseMeta(std::vector<std::string> const& metaContents);
 	std::vector<std::string> parseReadable(std::vector<std::string> const& readableContents);
-	void parseImportable(std::vector<std::string> const& importableContents, KeyNote::TextureMap const& pulseTextures);
+	void parseImportable(std::vector<std::string> const& importableContents);
+
+	std::shared_ptr<sf::Texture> _pulseTexture;
+	std::shared_ptr<sf::Texture> _disappearTexture;
+	std::shared_ptr<sf::Texture> _explodeGreatTexture;
+	std::shared_ptr<sf::Texture> _explodeGoodTexture;
 
 };

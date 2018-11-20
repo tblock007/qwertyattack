@@ -2,7 +2,7 @@
 
 #include <SFML/System.hpp>
 
-enum class KeyNoteState { SCROLLING, HIT, DEAD, SEQUENCE_IN_PROGRESS };
+enum class KeyNoteState { SCROLLING, DISAPPEARING, EXPLODING, DEAD, SEQUENCE_IN_PROGRESS };
 enum class Judgement { GREAT, GOOD, MISS };
 
 // TODO: organize these - perhaps an entity that stores global configuration parameters
@@ -17,7 +17,8 @@ static sf::Int32 constexpr leftOffset = 25;
 static sf::Int32 constexpr topOffset = 24;
 static sf::Int32 constexpr pixelsBetweenSprites = 128;
 static sf::Int32 constexpr pulseFrames = 125;
-static sf::Int32 constexpr explodeFrames = 37;
+static sf::Int32 constexpr disappearFrames = 5;
+static sf::Int32 constexpr explodeFrames = 33;
 static float constexpr zoneLeftBound = 40.0f;
 static float constexpr deathBound = -80.0f;
 
@@ -28,3 +29,8 @@ static sf::Int64 constexpr diffMicrosecondInterval = 17000;
 static float constexpr trackOffset = 100.0f;
 static float constexpr trackDistance = 150.0f;
 static sf::Int64 constexpr microsecondsPerFrame = 16667;
+
+static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse.png";
+static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear.png";
+static std::string const explodeGreatTextureFile = "resources/keynotes/explode_great.png";
+static std::string const explodeGoodTextureFile = "resources/keynotes/explode_good.png";

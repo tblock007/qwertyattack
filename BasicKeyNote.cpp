@@ -9,10 +9,13 @@
 /// <param name="c">The character</param>
 /// <param name="speed">The speed at which the BasicKeyNote will travel (pixels/microsecond)</param>
 /// <param name="targetHitTime">The time at which the corresponding key should be pressed</param>
-/// <param name="pulseTextures">The map of textures from which to load the "pulse" animation</param>
+/// <param name="pulseTexture">A pointer to the texture to be used for the "pulse" animation</param>
+/// <param name="disappearTexture">A pointer to the texture to be used for the "disappear" animation</param>
+/// <param name="explodeGreatTexture">A pointer to the texture to be used for the "explode" animation when hit with GREAT timing</param>
+/// <param name="explodeGoodTexture">A pointer to the texture to be used for the "explode" animation when hit with GOOD timing</param>
 /// <changed>tblock,11/17/2018</changed>
 // ********************************************************************************
-BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, TextureMap const& pulseTextures) : _state(KeyNoteState::SCROLLING), _key(c), _speed(speed), _targetHitTime(targetHitTime) {
+BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, std::shared_ptr<sf::Texture> pulseTexture, std::shared_ptr<sf::Texture> disappearTexture, std::shared_ptr<sf::Texture> explodeGreatTexture, std::shared_ptr<sf::Texture> explodeGoodTexture) : _state(KeyNoteState::SCROLLING), _key(c), _speed(speed), _targetHitTime(targetHitTime), _pulseTexture(pulseTexture), _disappearTexture(disappearTexture), _explodeGreatTexture(explodeGreatTexture), _explodeGoodTexture(explodeGoodTexture) {
 	switch (c) {
 	case 'Q':
 	case 'W':
@@ -51,8 +54,8 @@ BasicKeyNote::BasicKeyNote(char c, float speed, sf::Int64 targetHitTime, Texture
 		break;
 	}
 	
-	_image.setTexture(pulseTextures.at(std::string(1, _key)));
-	_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
+	_image.setTexture(*_pulseTexture);
+	_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset, width, height));
 }
 
 
@@ -77,11 +80,10 @@ KeyNoteState BasicKeyNote::getState() const {
 /// </summary>
 /// <param name="pressed">A bitmask indicating which keys were pressed</param>
 /// <param name="timeElapsed">A (relative) time in microseconds that indicates when the key was pressed</param>
-/// <param name="explodeTextures">The map of textures from which to load the "explode" animation</param>
-/// <returns>A judgement for the key press based on timing, if applicable</returns>
-/// <changed>tblock,11/19/2018</changed>
+/// <returns>A GREAT or GOOD judgement if the note was hit, otherwise an empty optional</returns>
+/// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
-std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed, TextureMap const& explodeTextures) {
+std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed) {
 	std::optional<Judgement> judgement;
 	if (_state == KeyNoteState::SCROLLING) {
 		if (pressed.test(_key - 'A')) {
@@ -89,16 +91,18 @@ std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf
 			// compute frame differential from ideal
 			sf::Int32 diffFrame = static_cast<sf::Int32>((timeElapsed - _targetHitTime) / diffMicrosecondInterval);
 			if (diffFrame >= (-1 * diffFrameGood + 1) && diffFrame <= diffFrameGood + 1) {
-				_state = KeyNoteState::HIT;
+				_state = KeyNoteState::DISAPPEARING;
 				_hitTime = timeElapsed;
-				_image.setTexture(explodeTextures.at(std::string(1, _key)));
-				_image.setTextureRect(sf::IntRect(leftOffset, topOffset, width, height));
+				_image.setTexture(*_disappearTexture);
+				_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset, width, height));
 
 				if (diffFrame >= (-1 * diffFrameGreat + 1) && diffFrame <= diffFrameGreat + 1) {
 					judgement = Judgement::GREAT;
+					_explodeTexture = _explodeGreatTexture;
 				}
 				else {
 					judgement = Judgement::GOOD;
+					_explodeTexture = _explodeGoodTexture;
 				}
 			}
 		}
@@ -113,8 +117,8 @@ std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf
 /// Updates the image of the BasicKeyNote to the appropriate frame of its animation.  This function handles both scrolling and hit animations.
 /// </summary>
 /// <param name="timeElapsed">A (relative) time in microseconds indicating time elapsed since some reference; used to compute frame of the hit animation, or proper position during scrolling</param>
-/// <returns>A MISS judgement if a note was missed, otherwise an empty optional</returns>
-/// <changed>tblock,11/19/2018</changed>
+/// <returns>A MISS judgement if the note was missed, otherwise an empty optional</returns>
+/// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
 std::optional<Judgement> BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 	std::optional<Judgement> result;
@@ -126,11 +130,22 @@ std::optional<Judgement> BasicKeyNote::updateFrame(sf::Int64 timeElapsed) {
 		else {
 			_image.setPosition((_targetHitTime - timeElapsed) * _speed + zoneLeftBound, _y);
 			sf::Int32 frame = (static_cast<sf::Int32>(timeElapsed / microsecondsPerFrame)) % pulseFrames;
-			_image.setTextureRect(sf::IntRect(leftOffset, topOffset + frame * pixelsBetweenSprites, width, height));
+			_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset + frame * pixelsBetweenSprites, width, height));
 		}
 	}
-	else if (_state == KeyNoteState::HIT) {
+	else if (_state == KeyNoteState::DISAPPEARING) {
 		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / microsecondsPerFrame));
+		if (frame >= disappearFrames) {
+			_state = KeyNoteState::EXPLODING;
+			_image.setTexture(*_explodeTexture);
+			_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset, width, height));
+		}
+		else {
+			_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset + frame * pixelsBetweenSprites, width, height));
+		}
+	}
+	else if (_state == KeyNoteState::EXPLODING) {
+		sf::Int32 frame = (static_cast<sf::Int32>((timeElapsed - _hitTime) / microsecondsPerFrame)) - disappearFrames;
 		if (frame >= explodeFrames) {
 			_state = KeyNoteState::DEAD;
 		}

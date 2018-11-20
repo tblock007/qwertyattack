@@ -1,6 +1,19 @@
 #include "KeyChart.h"
 
 
+KeyChart::KeyChart() {
+	_pulseTexture = std::make_shared<sf::Texture>();
+	_disappearTexture = std::make_shared<sf::Texture>();
+	_explodeGreatTexture = std::make_shared<sf::Texture>();
+	_explodeGoodTexture = std::make_shared<sf::Texture>();
+
+	_pulseTexture->loadFromFile(pulseTextureFile);
+	_disappearTexture->loadFromFile(disappearTextureFile);
+	_explodeGreatTexture->loadFromFile(explodeGreatTextureFile);
+	_explodeGoodTexture->loadFromFile(explodeGoodTextureFile);
+}
+
+
 // ********************************************************************************
 /// <summary>
 /// Getter method for song file of the KeyChart
@@ -58,10 +71,9 @@ std::string KeyChart::getGenre() const {
 /// Loads the KeyNotes specified by a KeyChart input file
 /// </summary>
 /// <param name="fileName">The relative path to the file to be parsed and loaded</param>
-/// <param name="pulseTextures">The map of the textures to use for the KeyNote "pulse" animations</param>
-/// <changed>tblock,11/17/2018</changed>
+/// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
-void KeyChart::importFile(std::string fileName, KeyNote::TextureMap const& pulseTextures) {
+void KeyChart::importFile(std::string fileName) {
 
 	std::fstream keyChartFile(fileName);
 	auto metaContents = getSectionContents("meta", keyChartFile);
@@ -73,7 +85,7 @@ void KeyChart::importFile(std::string fileName, KeyNote::TextureMap const& pulse
 		importableContents = parseReadable(readableContents);
 		rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
 	}
-	parseImportable(importableContents, pulseTextures);	
+	parseImportable(importableContents);	
 }
 
 
@@ -275,10 +287,9 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const&
 /// Parses the contents of the importable section to generate the actual KeyNote entities
 /// </summary>
 /// <param name="importableContents">The lines read from the importable section</param>
-/// <param name="pulseTextures">The map of textures to be used for the "pulse" animation of each KeyNote</param>
-/// <changed>tblock,11/18/2018</changed>
+/// <changed>tblock,11/20/2018</changed>
 // --------------------------------------------------------------------------------
-void KeyChart::parseImportable(std::vector<std::string> const& importableContents, KeyNote::TextureMap const& pulseTextures) {
+void KeyChart::parseImportable(std::vector<std::string> const& importableContents) {
 	
 	float defaultSpeedMultiplier = 1.0f;
 	for (auto const& line : importableContents) {
@@ -299,7 +310,7 @@ void KeyChart::parseImportable(std::vector<std::string> const& importableContent
 				speedMultiplier = defaultSpeedMultiplier;
 			}
 			sf::Int64 offscreenLoadTime = targetHitTime - static_cast<sf::Int64>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-			_keyNoteQueue.emplace(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, pulseTextures));
+			_keyNoteQueue.emplace(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, _pulseTexture, _disappearTexture, _explodeGreatTexture, _explodeGoodTexture));
 		}
 		else {
 			// error: invalid line in importable
