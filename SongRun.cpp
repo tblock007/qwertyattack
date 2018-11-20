@@ -13,6 +13,7 @@
 // ********************************************************************************
 void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 
+	// set up debug displays
 	sf::Font fpsFont;
 	fpsFont.loadFromFile("resources/sansation.ttf");
 	sf::Text fpsText;
@@ -29,27 +30,29 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 	scoreboardText.setCharacterSize(20);
 	scoreboardText.setPosition(5.0f, 600.0f);
 	
-	JudgementTally scoreboard;
-
-	KeyChart chart;
-	chart.importFile(keyChartFilePath);
-	sf::Music music;
-	music.openFromFile("resources/songs/" + chart.getSongFile());
-	
-	std::vector<std::shared_ptr<KeyNote>> keynotes;
-	
 	sf::Texture bgTexture;
 	bgTexture.loadFromFile("resources/bg.png");
 	sf::Sprite bg;
 	bg.setTexture(bgTexture);
 	bg.setPosition(0, 0);
 
+	// generate in-game entities
+	JudgementTally scoreboard;
+
+	KeyChart chart;
+	chart.importFile(keyChartFilePath);
+
+	sf::Music music;
+	music.openFromFile("resources/songs/" + chart.getSongFile());
+	
+	std::vector<std::shared_ptr<KeyNote>> keynotes;
+
 	std::bitset<26> pressed;
 	sf::Clock frameClock;
 	sf::Clock overallClock;
 	int frameCounter = 0;
 	
-	// play music and start the game loop
+	// start the game loop
 	music.play();
 	while (window.isOpen())
 	{
@@ -91,30 +94,33 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 		// remove any inactive KeyNotes from our data structure
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }), keynotes.end());
 
+		// send the keys pressed to all KeyNotes to see if any hits or misses occur
+		for (auto kn : keynotes) {
+			auto judgement = kn->sendKey(pressed, overallTime);
+			if (judgement) {
+				scoreboard.incrementTally(judgement.value());
+			}
+			judgement = kn->updateFrame(overallTime); // note that this call returns a MISS judgement if the update causes a KeyNote to scroll off the screen
+			if (judgement) {
+				scoreboard.incrementTally(judgement.value());
+			}
+		}
+		auto[greats, goods, misses] = scoreboard.getTallies();
+		scoreboardText.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods) + "\nMISSES: " + std::to_string(misses));
+
 		// render the frame
 		window.clear();
 		window.draw(bg);
 		window.draw(fpsText);
 
-		for (auto kn : keynotes) {
-			
-			auto judgement = kn->sendKey(pressed, overallTime);
-			if (judgement) {
-				scoreboard.incrementTally(judgement.value());
-			}
-			judgement = kn->updateFrame(overallTime);
-			if (judgement) {
-				scoreboard.incrementTally(judgement.value());
-			}
+		for (auto kn : keynotes) {			
 			window.draw(*kn);
 		}
 
-		auto[greats, goods, misses] = scoreboard.getTallies();
-		scoreboardText.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods) + "\nMISSES: " + std::to_string(misses));
 		window.draw(scoreboardText);
 
 		window.display();
-		frameCounter++;
 
+		frameCounter++;
 	}
 }
