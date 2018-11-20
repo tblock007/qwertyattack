@@ -20,6 +20,7 @@ KeyChart::KeyChart() {
 }
 
 
+
 // ********************************************************************************
 /// <summary>
 /// Getter method for song file of the KeyChart
@@ -99,7 +100,7 @@ void KeyChart::importFile(std::string fileName) {
 
 // ********************************************************************************
 /// <summary>
-/// Checks the priority queue to see if the upcoming KeyNotes are soon enough to be loaded
+/// Checks the upcoming KeyNotes to see if the upcoming KeyNotes are soon enough to be loaded
 /// </summary>
 /// <param name="timeElapsed">A (relative) time in microseconds indicating time elapsed since some reference; used to determine whether a KeyNote should be returned</param>
 /// <returns>An optional pointer to KeyNote that points to the KeyNote to be added to the list of entities, if present</returns>
@@ -107,10 +108,10 @@ void KeyChart::importFile(std::string fileName) {
 // ********************************************************************************
 std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElapsed) {
 	std::optional<std::shared_ptr<KeyNote>> result;
-	if (!_keyNoteQueue.empty()) {
-		if (timeElapsed > _keyNoteQueue.top().first) {
-			result = _keyNoteQueue.top().second;
-			_keyNoteQueue.pop();
+	if (!_keyNoteStack.empty()) {
+		if (timeElapsed > _keyNoteStack.back().first) {
+			result = _keyNoteStack.back().second;
+			_keyNoteStack.pop_back();
 		}
 	}
 	return result;
@@ -316,10 +317,13 @@ void KeyChart::parseImportable(std::vector<std::string> const& importableContent
 				speedMultiplier = defaultSpeedMultiplier;
 			}
 			sf::Int64 offscreenLoadTime = targetHitTime - static_cast<sf::Int64>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-			_keyNoteQueue.emplace(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, _pulseTexture, _disappearTexture, _explodeGreatTexture, _explodeGoodTexture));
+			_keyNoteStack.emplace_back(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, _pulseTexture, _disappearTexture, _explodeGreatTexture, _explodeGoodTexture));
 		}
 		else {
 			// error: invalid line in importable
 		}
 	}
+
+	// populate the stack now that we can extract the KeyNotes in targetHitTime order
+	std::sort(_keyNoteStack.begin(), _keyNoteStack.end(), [](TimePointerPair const& lhs, TimePointerPair const& rhs) -> bool { return lhs.first > rhs.first; });
 }

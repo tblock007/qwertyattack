@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <optional>
-#include <queue>
+#include <vector>
 #include "common.h"
 #include "BasicKeyNote.h"
 
@@ -27,7 +27,7 @@ public:
 private:
 	
 	using TimePointerPair = std::pair<sf::Int64, std::shared_ptr<KeyNote>>;
-	std::priority_queue<TimePointerPair, std::vector<TimePointerPair>, std::greater<TimePointerPair>> _keyNoteQueue;
+	std::vector<TimePointerPair> _keyNoteStack;
 
 	std::string _songFile;
 	std::string _title;
