@@ -1,6 +1,12 @@
 #include "KeyChart.h"
 
 
+// ********************************************************************************
+/// <summary>
+/// Constructor for KeyChart.  Loads the textures from file.
+/// </summary>
+/// <changed>tblock,11/20/2018</changed>
+// ********************************************************************************
 KeyChart::KeyChart() {
 	_pulseTexture = std::make_shared<sf::Texture>();
 	_disappearTexture = std::make_shared<sf::Texture>();
