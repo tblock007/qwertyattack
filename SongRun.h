@@ -1,6 +1,7 @@
 #pragma once
 #include <bitset>
 #include <iostream>
+#include <vector>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

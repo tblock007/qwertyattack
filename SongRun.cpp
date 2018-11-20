@@ -46,6 +46,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 	music.openFromFile("resources/songs/" + chart.getSongFile());
 	
 	std::vector<std::shared_ptr<KeyNote>> keynotes;
+	keynotes.reserve(10000);
 
 	std::bitset<26> pressed;
 	sf::Clock frameClock;
@@ -93,6 +94,8 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 
 		// remove any inactive KeyNotes from our data structure
 		keynotes.erase(std::remove_if(keynotes.begin(), keynotes.end(), [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }), keynotes.end());
+
+
 
 		// send the keys pressed to all KeyNotes to see if any hits or misses occur
 		for (auto kn : keynotes) {
