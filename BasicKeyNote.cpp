@@ -93,6 +93,7 @@ std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf
 			if (diffFrame >= (-1 * diffFrameGood + 1) && diffFrame <= diffFrameGood + 1) {
 				_state = KeyNoteState::DISAPPEARING;
 				_hitTime = timeElapsed;
+				_image.setPosition(zoneLeftBound, _y);
 				_image.setTexture(*_disappearTexture);
 				_image.setTextureRect(sf::IntRect(leftOffset + ((_key - 'A') * pixelsBetweenSprites), topOffset, width, height));
 
