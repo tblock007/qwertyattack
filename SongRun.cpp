@@ -88,7 +88,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 		auto dt = frameClock.restart().asMicroseconds();
 		float fps = 1000000.0f / dt;
 		if (frameCounter % 60 == 0) {
-			fpsText.setString("FPS: " + std::to_string(fps));
+			fpsText.setString("FPS: " + std::to_string(fps) + "; Active KeyNotes: " + std::to_string(keynotes.size()));
 		}
 
 		window.clear();
