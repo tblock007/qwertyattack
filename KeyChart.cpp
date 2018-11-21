@@ -181,8 +181,8 @@ void KeyChart::appendContents(std::ofstream& fout, std::string section, std::vec
 void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string> const& metaContents, std::vector<std::string> const& readableContents, std::vector<std::string> const& importableContents) {
 	std::ofstream keyChartFile(fileName, std::ios_base::trunc);
 	appendContents(keyChartFile, "meta", metaContents);
+	appendContents(keyChartFile, "readable", readableContents);
 	appendContents(keyChartFile, "importable", importableContents);
-	appendContents(keyChartFile, "readable", readableContents);	
 }
 
 
