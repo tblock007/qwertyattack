@@ -7,7 +7,7 @@
 /// </summary>
 /// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
-JudgementTally::JudgementTally() : _greats(0), _goods(0), _misses(0) {
+JudgementTally::JudgementTally() : greats_(0), goods_(0), misses_(0) {
 }
 
 
@@ -20,7 +20,7 @@ JudgementTally::JudgementTally() : _greats(0), _goods(0), _misses(0) {
 /// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
 std::tuple<sf::Int32, sf::Int32, sf::Int32> JudgementTally::getTallies() const {
-	return { _greats, _goods, _misses };
+	return { greats_, goods_, misses_ };
 }
 
 
@@ -34,12 +34,12 @@ std::tuple<sf::Int32, sf::Int32, sf::Int32> JudgementTally::getTallies() const {
 // ********************************************************************************
 void JudgementTally::incrementTally(Judgement judgement) {
 	if (judgement == Judgement::GREAT) {
-		_greats++;
+		greats_++;
 	}
 	else if (judgement == Judgement::GOOD) {
-		_goods++;
+		goods_++;
 	}
 	else if (judgement == Judgement::MISS) {
-		_misses++;
+		misses_++;
 	}
 }

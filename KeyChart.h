@@ -27,12 +27,17 @@ public:
 private:
 	
 	using TimePointerPair = std::pair<sf::Int64, std::shared_ptr<KeyNote>>;
-	std::vector<TimePointerPair> _keyNoteStack;
+	std::vector<TimePointerPair> keyNoteStack_;
 
-	std::string _songFile;
-	std::string _title;
-	std::string _artist;
-	std::string _genre;
+	std::string songFile_;
+	std::string title_;
+	std::string artist_;
+	std::string genre_;
+
+	std::shared_ptr<sf::Texture> pulseTexture_;
+	std::shared_ptr<sf::Texture> disappearTexture_;
+	std::shared_ptr<sf::Texture> explodeGreatTexture_;
+	std::shared_ptr<sf::Texture> explodeGoodTexture_;
 
 	std::vector<std::string> getSectionContents(std::string section, std::fstream& fin);
 	void appendContents(std::ofstream& fout, std::string section, std::vector<std::string> const& contents);
@@ -41,9 +46,5 @@ private:
 	std::vector<std::string> parseReadable(std::vector<std::string> const& readableContents);
 	void parseImportable(std::vector<std::string> const& importableContents);
 
-	std::shared_ptr<sf::Texture> _pulseTexture;
-	std::shared_ptr<sf::Texture> _disappearTexture;
-	std::shared_ptr<sf::Texture> _explodeGreatTexture;
-	std::shared_ptr<sf::Texture> _explodeGoodTexture;
 
 };

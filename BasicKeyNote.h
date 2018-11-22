@@ -25,20 +25,20 @@ public:
 
 private:
 
-	KeyNoteState _state;
-	char _key;
+	KeyNoteState state_;
+	char key_;
 
-	float _speed;
-	float _y;
+	float speed_;
+	float y_;
 
-	sf::Sprite _image;
-	sf::Int64 _hitTime;
-	sf::Int64 _targetHitTime;
+	sf::Sprite image_;
+	sf::Int64 hitTime_;
+	sf::Int64 targetHitTime_;
 
-	std::shared_ptr<sf::Texture> _pulseTexture;
-	std::shared_ptr<sf::Texture> _disappearTexture;
-	std::shared_ptr<sf::Texture> _explodeTexture;
-	std::shared_ptr<sf::Texture> _explodeGreatTexture;
-	std::shared_ptr<sf::Texture> _explodeGoodTexture;
+	std::shared_ptr<sf::Texture> pulseTexture_;
+	std::shared_ptr<sf::Texture> disappearTexture_;
+	std::shared_ptr<sf::Texture> explodeTexture_;
+	std::shared_ptr<sf::Texture> explodeGreatTexture_;
+	std::shared_ptr<sf::Texture> explodeGoodTexture_;
 
 };

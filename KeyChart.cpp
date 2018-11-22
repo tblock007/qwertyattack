@@ -8,15 +8,15 @@
 /// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
 KeyChart::KeyChart() {
-	_pulseTexture = std::make_shared<sf::Texture>();
-	_disappearTexture = std::make_shared<sf::Texture>();
-	_explodeGreatTexture = std::make_shared<sf::Texture>();
-	_explodeGoodTexture = std::make_shared<sf::Texture>();
+	pulseTexture_ = std::make_shared<sf::Texture>();
+	disappearTexture_ = std::make_shared<sf::Texture>();
+	explodeGreatTexture_ = std::make_shared<sf::Texture>();
+	explodeGoodTexture_ = std::make_shared<sf::Texture>();
 
-	_pulseTexture->loadFromFile(pulseTextureFile);
-	_disappearTexture->loadFromFile(disappearTextureFile);
-	_explodeGreatTexture->loadFromFile(explodeGreatTextureFile);
-	_explodeGoodTexture->loadFromFile(explodeGoodTextureFile);
+	pulseTexture_->loadFromFile(pulseTextureFile);
+	disappearTexture_->loadFromFile(disappearTextureFile);
+	explodeGreatTexture_->loadFromFile(explodeGreatTextureFile);
+	explodeGoodTexture_->loadFromFile(explodeGoodTextureFile);
 }
 
 
@@ -29,7 +29,7 @@ KeyChart::KeyChart() {
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
 std::string KeyChart::getSongFile() const {
-	return _songFile;
+	return songFile_;
 }
 
 
@@ -42,7 +42,7 @@ std::string KeyChart::getSongFile() const {
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
 std::string KeyChart::getTitle() const {
-	return _title;
+	return title_;
 }
 
 
@@ -55,7 +55,7 @@ std::string KeyChart::getTitle() const {
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
 std::string KeyChart::getArtist() const {
-	return _artist;
+	return artist_;
 }
 
 
@@ -68,7 +68,7 @@ std::string KeyChart::getArtist() const {
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
 std::string KeyChart::getGenre() const {
-	return _genre;
+	return genre_;
 }
 
 
@@ -87,7 +87,7 @@ void KeyChart::importFile(std::string fileName) {
 	auto readableContents = getSectionContents("readable", keyChartFile);
 	auto importableContents = getSectionContents("importable", keyChartFile);
 
-	std::tie(_songFile, _title, _artist, _genre) = parseMeta(metaContents);
+	std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
 	if (importableContents.empty()) {
 		importableContents = parseReadable(readableContents);
 		rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
@@ -108,10 +108,10 @@ void KeyChart::importFile(std::string fileName) {
 // ********************************************************************************
 std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElapsed) {
 	std::optional<std::shared_ptr<KeyNote>> result;
-	if (!_keyNoteStack.empty()) {
-		if (timeElapsed > _keyNoteStack.back().first) {
-			result = _keyNoteStack.back().second;
-			_keyNoteStack.pop_back();
+	if (!keyNoteStack_.empty()) {
+		if (timeElapsed > keyNoteStack_.back().first) {
+			result = keyNoteStack_.back().second;
+			keyNoteStack_.pop_back();
 		}
 	}
 	return result;
@@ -317,7 +317,7 @@ void KeyChart::parseImportable(std::vector<std::string> const& importableContent
 				speedMultiplier = defaultSpeedMultiplier;
 			}
 			sf::Int64 offscreenLoadTime = targetHitTime - static_cast<sf::Int64>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-			_keyNoteStack.emplace_back(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, _pulseTexture, _disappearTexture, _explodeGreatTexture, _explodeGoodTexture));
+			keyNoteStack_.emplace_back(offscreenLoadTime, std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, pulseTexture_, disappearTexture_, explodeGreatTexture_, explodeGoodTexture_));
 		}
 		else {
 			// error: invalid line in importable
@@ -325,5 +325,5 @@ void KeyChart::parseImportable(std::vector<std::string> const& importableContent
 	}
 
 	// populate the stack now that we can extract the KeyNotes in targetHitTime order
-	std::sort(_keyNoteStack.begin(), _keyNoteStack.end(), [](TimePointerPair const& lhs, TimePointerPair const& rhs) -> bool { return lhs.first > rhs.first; });
+	std::sort(keyNoteStack_.begin(), keyNoteStack_.end(), [](TimePointerPair const& lhs, TimePointerPair const& rhs) -> bool { return lhs.first > rhs.first; });
 }

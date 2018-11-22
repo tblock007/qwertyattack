@@ -13,7 +13,7 @@ public:
 	std::tuple<sf::Int32, sf::Int32, sf::Int32> getTallies() const;
 	void incrementTally(Judgement judgement);
 private:
-	sf::Int32 _greats;
-	sf::Int32 _goods;
-	sf::Int32 _misses;
+	sf::Int32 greats_;
+	sf::Int32 goods_;
+	sf::Int32 misses_;
 };
