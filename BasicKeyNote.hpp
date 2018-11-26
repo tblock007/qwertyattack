@@ -2,8 +2,8 @@
 #include <bitset>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
-#include "common.h"
-#include "KeyNote.h"
+#include "common.hpp"
+#include "KeyNote.hpp"
 
 
 // --------------------------------------------------------------------------------

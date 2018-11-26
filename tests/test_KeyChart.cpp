@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../KeyChart.h"
+#include "../KeyChart.hpp"
 
 
 

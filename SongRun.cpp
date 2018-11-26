@@ -1,4 +1,4 @@
-#include "SongRun.h"
+#include "SongRun.hpp"
 
 
 
@@ -81,6 +81,9 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window) {
 		// handle timing
 		auto dt = frameClock.restart().asMicroseconds();
 		float fps = 1000000.0f / dt;
+		if (fps < 50.0f) {
+			std::cout << "FPS dropped to " << fps << " at frame " << frameCounter << std::endl;
+		}
 		if (frameCounter % 60 == 0) {
 			fpsText.setString("FPS: " + std::to_string(fps) + "; Active KeyNotes: " + std::to_string(keynotes.size()));
 		}		

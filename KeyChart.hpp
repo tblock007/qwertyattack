@@ -4,8 +4,8 @@
 #include <sstream>
 #include <optional>
 #include <vector>
-#include "common.h"
-#include "BasicKeyNote.h"
+#include "common.hpp"
+#include "BasicKeyNote.hpp"
 
 
 // --------------------------------------------------------------------------------
