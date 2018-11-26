@@ -16,8 +16,15 @@ set(SOURCE_FILES
 	SongRun.h
 	SongRun.cpp)
 
+set(TEST_SOURCE_FILES
+	tests/catch.hpp
+	tests/test_KeyChart.cpp)
+		
+
+
 if(LINUX)
 	add_executable(qwertyattack main.cpp ${SOURCE_FILES})
+	add_executable(test_qwertyattack tests/test_main.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 
 	find_package(Threads)
 	include_directories("/usr/include")
@@ -27,12 +34,17 @@ if(LINUX)
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-system.so")
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-window.so")
+	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-audio.so")
+	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
+	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-system.so")
+	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-window.so")
 endif(LINUX)
 
 
 
 if(WIN32)
 	add_executable(qwertyattack main.cpp ${SOURCE_FILES})
+	add_executable(test_qwertyattack tests/test_main.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 
 	include_directories("C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\include")
 	link_directories("C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib")
@@ -40,4 +52,8 @@ if(WIN32)
 	target_link_libraries(qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-graphics.lib")
 	target_link_libraries(qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-system.lib")
 	target_link_libraries(qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-window.lib")
+	target_link_libraries(test_qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-audio.lib")
+	target_link_libraries(test_qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-graphics.lib")
+	target_link_libraries(test_qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-system.lib")
+	target_link_libraries(test_qwertyattack "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\lib\\SFML\\sfml-window.lib")
 endif(WIN32)
