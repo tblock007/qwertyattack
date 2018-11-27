@@ -1,6 +1,7 @@
 dist: xenial
 language: cpp
 compiler: gcc
+sudo: enabled
 
 addons:
   apt:
@@ -22,7 +23,7 @@ before_script:
   - git checkout tags/2.5.1
   - mkdir build && cd build
   - cmake ..
-  - cmake --build . --target install
+  - sudo cmake --build . --target install
   - cd ../..
 script:
   - mkdir cmake-build-release && cd cmake-build-release
