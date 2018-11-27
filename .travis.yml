@@ -27,7 +27,7 @@ before_script:
   - sudo $(which cmake) --build . --target install
   - cd ../..
 script:
-  - mkdir cmake-build-release && cd cmake-build-release
+  - cd cmake-build-release
   - cmake ..
   - make
   - ./test_qwertyattack
