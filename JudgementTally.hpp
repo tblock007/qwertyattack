@@ -8,12 +8,13 @@
 /// </summary>
 // --------------------------------------------------------------------------------
 class JudgementTally {
-public:
-	JudgementTally();
-	std::tuple<sf::Int32, sf::Int32, sf::Int32> getTallies() const;
-	void incrementTally(Judgement judgement);
-private:
-	sf::Int32 greats_;
-	sf::Int32 goods_;
-	sf::Int32 misses_;
+  public:
+   JudgementTally();
+   std::tuple<sf::Int32, sf::Int32, sf::Int32> getTallies() const;
+   void incrementTally(Judgement judgement);
+
+  private:
+   sf::Int32 greats_;
+   sf::Int32 goods_;
+   sf::Int32 misses_;
 };

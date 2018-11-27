@@ -5,15 +5,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-build-release/)
 
 set(SOURCE_FILES 
-	common.h
-	BasicKeyNote.h
+	common.hpp
+	BasicKeyNote.hpp
 	BasicKeyNote.cpp
-	JudgementTally.h
+	JudgementTally.hpp
 	JudgementTally.cpp
-	KeyChart.h
+	KeyChart.hpp
 	KeyChart.cpp
-	KeyNote.h
-	SongRun.h
+	KeyNote.hpp
+	SongRun.hpp
 	SongRun.cpp)
 
 set(TEST_SOURCE_FILES
