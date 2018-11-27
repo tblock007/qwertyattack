@@ -2,6 +2,7 @@
 #include <SFML/System.hpp>
 #include "common.hpp"
 
+namespace qa {
 // --------------------------------------------------------------------------------
 /// <summary>
 /// Represents counts for all judgements received in a SongRun
@@ -10,7 +11,9 @@
 class JudgementTally {
   public:
    JudgementTally();
+
    std::tuple<sf::Int32, sf::Int32, sf::Int32> getTallies() const;
+
    void incrementTally(Judgement judgement);
 
   private:
@@ -18,3 +21,4 @@ class JudgementTally {
    sf::Int32 goods_;
    sf::Int32 misses_;
 };
+}  // namespace qa

@@ -8,6 +8,8 @@
 
 int main()
 {
+   using namespace qa;
+
    // Request a 24-bits depth buffer when creating the window
    sf::ContextSettings contextSettings;
    contextSettings.depthBits = 24;

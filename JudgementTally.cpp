@@ -1,5 +1,6 @@
 #include "JudgementTally.hpp"
 
+namespace qa {
 // ********************************************************************************
 /// <summary>
 /// Constructs a new instance of a JudgementTally, with all counts initialized to zero
@@ -41,3 +42,5 @@ void JudgementTally::incrementTally(Judgement judgement)
       misses_++;
    }
 }
+
+}  // namespace qa

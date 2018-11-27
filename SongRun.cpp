@@ -1,5 +1,6 @@
 #include "SongRun.hpp"
 
+namespace qa {
 // ********************************************************************************
 /// <summary>
 /// Runs the song
@@ -8,7 +9,7 @@
 /// <param name="window">The RenderWindow on which to render graphics</param>
 /// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
-void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
+void SongRun::run(std::string keyChartFilePath, sf::RenderWindow &window)
 {
    // set up debug displays
    sf::Font fpsFont;
@@ -93,7 +94,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       // remove any inactive KeyNotes from our data structure
       keynotes.erase(
           std::remove_if(keynotes.begin(), keynotes.end(),
-                         [](std::shared_ptr<KeyNote> const& kn) { return (kn->getState() == KeyNoteState::DEAD); }),
+                         [](std::shared_ptr<KeyNote> const &kn) { return (kn->getState() == KeyNoteState::DEAD); }),
           keynotes.end());
 
       // send the keys pressed to all KeyNotes to see if any hits or misses occur
@@ -103,7 +104,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
             scoreboard.incrementTally(judgement.value());
          }
          judgement = kn->updateFrame(overallTime);  // note that this call returns a MISS judgement if the update causes
-                                                    // a KeyNote to scroll off the screen
+         // a KeyNote to scroll off the screen
          if (judgement) {
             scoreboard.incrementTally(judgement.value());
          }
@@ -128,3 +129,5 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       frameCounter++;
    }
 }
+
+}  // namespace qa

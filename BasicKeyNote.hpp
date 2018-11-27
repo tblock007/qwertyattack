@@ -5,6 +5,7 @@
 #include "KeyNote.hpp"
 #include "common.hpp"
 
+namespace qa {
 // --------------------------------------------------------------------------------
 /// <summary>
 /// Represents a basic KeyNote, which only requires a single keypress from the player
@@ -19,9 +20,12 @@ class BasicKeyNote : public KeyNote {
                 std::shared_ptr<sf::Texture> explodeGoodTexture);
 
    KeyNoteState getState() const override;
+
    std::optional<Judgement> sendKey(std::bitset<NUM_KEYS> pressed, sf::Int64 timeElapsed) override;
+
    std::optional<Judgement> updateFrame(sf::Int64 timeElapsed) override;
-   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+   void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
   private:
    KeyNoteState state_;
@@ -40,3 +44,4 @@ class BasicKeyNote : public KeyNote {
    std::shared_ptr<sf::Texture> explodeGreatTexture_;
    std::shared_ptr<sf::Texture> explodeGoodTexture_;
 };
+}  // namespace qa

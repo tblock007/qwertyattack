@@ -10,6 +10,7 @@
 #include "KeyChart.hpp"
 #include "common.hpp"
 
+namespace qa {
 // --------------------------------------------------------------------------------
 /// <summary>
 /// Represents one play of a song
@@ -19,5 +20,7 @@
 // --------------------------------------------------------------------------------
 class SongRun {
   public:
-   void run(std::string keyChartFilePath, sf::RenderWindow& window);
+   void run(std::string keyChartFilePath, sf::RenderWindow &window);
 };
+
+}  // namespace qa

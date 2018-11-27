@@ -1,5 +1,6 @@
 #include "BasicKeyNote.hpp"
 
+namespace qa {
 // ********************************************************************************
 /// <summary>
 /// Constructor for BasicKeyNote
@@ -174,7 +175,9 @@ std::optional<Judgement> BasicKeyNote::updateFrame(sf::Int64 timeElapsed)
 /// <param name="states">The RenderStates which control the render</param>
 /// <changed>tblock,11/15/2018</changed>
 // ********************************************************************************
-void BasicKeyNote::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void BasicKeyNote::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
    target.draw(image_);
 }
+
+}  // namespace qa

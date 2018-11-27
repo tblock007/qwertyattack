@@ -2,6 +2,7 @@
 
 #include <SFML/System.hpp>
 
+namespace qa {
 enum class KeyNoteState { SCROLLING, DISAPPEARING, EXPLODING, DEAD, SEQUENCE_IN_PROGRESS };
 enum class Judgement { GREAT, GOOD, MISS };
 
@@ -35,3 +36,20 @@ static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse_ko
 static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear_kor.png";
 static std::string const explodeGreatTextureFile = "resources/keynotes/explode_great.png";
 static std::string const explodeGoodTextureFile = "resources/keynotes/explode_good.png";
+
+static inline void ltrim(std::string& s)
+{
+   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int c) { return !std::isspace(c); }));
+}
+
+static inline void rtrim(std::string& s)
+{
+   s.erase(std::find_if(s.rbegin(), s.rend(), [](int c) { return !std::isspace(c); }).base(), s.end());
+}
+
+static inline void trim(std::string& s)
+{
+   ltrim(s);
+   rtrim(s);
+}
+}  // namespace qa

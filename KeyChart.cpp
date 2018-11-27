@@ -1,5 +1,6 @@
 #include "KeyChart.hpp"
 
+namespace qa {
 // ********************************************************************************
 /// <summary>
 /// Constructor for KeyChart.  Loads the textures from file.
@@ -118,7 +119,7 @@ std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElaps
 /// <returns>A vector of lines with all the contents of the requested section</returns>
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
-std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, std::fstream& fin)
+std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, std::fstream &fin)
 {
    std::vector<std::string> result;
 
@@ -129,8 +130,13 @@ std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, s
    std::string targetEndLine = ".END " + sectionName;
    std::string line;
    while (std::getline(fin, line)) {
+      trim(line);
       if (line == targetBeginLine) {
-         while (std::getline(fin, line) && line != targetEndLine) {
+         while (std::getline(fin, line)) {
+            trim(line);
+            if (line == targetEndLine) {
+               break;
+            }
             result.push_back(line);
          }
       }
@@ -147,10 +153,10 @@ std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, s
 /// <param name="contents">The contents of the section</param>
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
-void KeyChart::appendContents(std::ofstream& fout, std::string section, std::vector<std::string> const& contents)
+void KeyChart::appendContents(std::ofstream &fout, std::string section, std::vector<std::string> const &contents)
 {
    fout << ".BEGIN " << section << std::endl;
-   for (auto const& line : contents) {
+   for (auto const &line : contents) {
       fout << line << std::endl;
    }
    fout << ".END " << section << std::endl << std::endl;
@@ -162,9 +168,9 @@ void KeyChart::appendContents(std::ofstream& fout, std::string section, std::vec
 /// readable section is parsed to create the importable section.
 /// </summary>
 // --------------------------------------------------------------------------------
-void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string> const& metaContents,
-                                   std::vector<std::string> const& readableContents,
-                                   std::vector<std::string> const& importableContents)
+void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string> const &metaContents,
+                                   std::vector<std::string> const &readableContents,
+                                   std::vector<std::string> const &importableContents)
 {
    std::ofstream keyChartFile(fileName, std::ios_base::trunc);
    appendContents(keyChartFile, "meta", metaContents);
@@ -182,11 +188,11 @@ void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
 std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMeta(
-    std::vector<std::string> const& metaContents)
+    std::vector<std::string> const &metaContents)
 {
    std::string songFile, title, artist, genre;
 
-   for (auto const& line : metaContents) {
+   for (auto const &line : metaContents) {
       std::istringstream iss(line);
       std::string firstToken;
       iss >> firstToken;
@@ -215,7 +221,7 @@ std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMe
 /// <returns>The contents of the importable section that can be written</returns>
 /// <changed>tblock,11/18/2018</changed>
 // ********************************************************************************
-std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const& readableContents)
+std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const &readableContents)
 {
    std::vector<std::string> result;
    result.push_back("!DEFAULTSPEED 1");
@@ -223,7 +229,7 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const&
    std::optional<float> bpm;
    std::optional<sf::Int32> bpl;
    float microsecondTime = 0.0f;
-   for (auto const& line : readableContents) {
+   for (auto const &line : readableContents) {
       if (!line.empty() && line[0] == '#') {
          continue;  // skip comment
       }
@@ -278,10 +284,10 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const&
 /// <param name="importableContents">The lines read from the importable section</param>
 /// <changed>tblock,11/20/2018</changed>
 // --------------------------------------------------------------------------------
-void KeyChart::parseImportable(std::vector<std::string> const& importableContents)
+void KeyChart::parseImportable(std::vector<std::string> const &importableContents)
 {
    float defaultSpeedMultiplier = 1.0f;
-   for (auto const& line : importableContents) {
+   for (auto const &line : importableContents) {
       std::istringstream iss(line);
       std::string firstToken;
       iss >> firstToken;
@@ -313,5 +319,7 @@ void KeyChart::parseImportable(std::vector<std::string> const& importableContent
 
    // populate the stack now that we can extract the KeyNotes in targetHitTime order
    std::sort(keyNoteStack_.begin(), keyNoteStack_.end(),
-             [](TimePointerPair const& lhs, TimePointerPair const& rhs) -> bool { return lhs.first > rhs.first; });
+             [](TimePointerPair const &lhs, TimePointerPair const &rhs) -> bool { return lhs.first > rhs.first; });
 }
+
+}  // namespace qa
