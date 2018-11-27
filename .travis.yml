@@ -7,7 +7,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-	  - freeglut3-dev
+      - freeglut3-dev
       - libxrandr-dev
       - libudev-dev
       - libopenal-dev
