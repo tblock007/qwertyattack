@@ -1,28 +1,28 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.9)
 project(qwertyattack)
 
 set(CMAKE_CXX_STANDARD 17)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-build-release/)
 
-set(SOURCE_FILES 
-	common.hpp
-	BasicKeyNote.hpp
-	BasicKeyNote.cpp
-	JudgementTally.hpp
-	JudgementTally.cpp
-	KeyChart.hpp
-	KeyChart.cpp
-	KeyNote.hpp
-	SongRun.hpp
-	SongRun.cpp)
+set(SOURCE_FILES
+		common.hpp
+		BasicKeyNote.hpp
+		BasicKeyNote.cpp
+		JudgementTally.hpp
+		JudgementTally.cpp
+		KeyChart.hpp
+		KeyChart.cpp
+		KeyNote.hpp
+		SongRun.hpp
+		SongRun.cpp)
 
 set(TEST_SOURCE_FILES
-	tests/catch.hpp
-	tests/test_KeyChart.cpp)
-		
+		tests/catch.hpp
+		tests/test_KeyChart.cpp)
 
 
-if(LINUX)
+
+if(1)
 	add_executable(qwertyattack main.cpp ${SOURCE_FILES})
 	add_executable(test_qwertyattack tests/test_main.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 
@@ -38,7 +38,7 @@ if(LINUX)
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-system.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-window.so")
-endif(LINUX)
+endif(1)
 
 
 
