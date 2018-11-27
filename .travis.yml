@@ -14,7 +14,7 @@ before_script:
   - git clone https://github.com/sfml/sfml && cd sfml
   - git checkout tags/2.5.1
   - mkdir build && cd build
-  - cmake .. -G"$GENERATOR" $CMAKE_FLAGS && sudo cmake --build . --target install && cd ../..
+  - cmake .. && sudo cmake --build . --target install && cd ../..
 script:
   - mkdir cmake-build-release && cd cmake-build-release
   - cmake ..
