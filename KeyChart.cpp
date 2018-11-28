@@ -78,9 +78,11 @@ std::string KeyChart::getGenre() const
 void KeyChart::importFile(std::string fileName)
 {
    std::fstream keyChartFile(fileName);
+   std::cout << "constructed fstream" << std::endl;
    auto metaContents = getSectionContents("meta", keyChartFile);
    auto readableContents = getSectionContents("readable", keyChartFile);
    auto importableContents = getSectionContents("importable", keyChartFile);
+   std::cout << "done reading contents" << std::endl;
 
    std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
    if (importableContents.empty()) {

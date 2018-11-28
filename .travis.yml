@@ -33,6 +33,9 @@ script:
   - cd testdata
   - ls -al
   - cd ..
+  - cd resources/keynotes
+  - ls -al
+  - cd ../..
   - xvfb-run ./test_qwertyattack
 
 
