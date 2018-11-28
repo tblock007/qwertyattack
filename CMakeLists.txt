@@ -28,16 +28,15 @@ if(1)
 
 	find_package(Threads)
 	include_directories("/usr/include")
-	link_directories("/usr/lib")
 	target_link_libraries(qwertyattack ${CMAKE_THREAD_LIBS_INIT})
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-audio.so")
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
-	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-system.so")
 	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-window.so")
+	target_link_libraries(qwertyattack "/usr/lib/SFML/libsfml-system.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-audio.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
-	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-system.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-window.so")
+	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-system.so")
 endif(1)
 
 
