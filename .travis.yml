@@ -37,6 +37,6 @@ script:
   - cd resources/keynotes
   - ls -al
   - cd ../..
-  - xvfb-run ./qwerty_attack
+  - xvfb-run ./qwertyattack
 
 
