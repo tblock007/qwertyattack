@@ -21,7 +21,7 @@ addons:
 before_script:
   - export CXX=g++-7
   - g++ -v && cmake --version
-  - glxinfo | grep "OpenGL version"
+  - xvfb-run glxinfo | grep "OpenGL version"
   - ls -al
   - sudo cp -r SFML-2.5.1/include/SFML/ /usr/local/include/
   - sudo cp -r SFML-2.5.1/lib/SFML/ /usr/local/lib/
