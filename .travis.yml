@@ -30,6 +30,9 @@ script:
   - cd cmake-build-release
   - cmake ..
   - make
+  - cd testdata
+  - ls -al
+  - cd ..
   - xvfb-run ./test_qwertyattack
 
 
