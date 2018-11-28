@@ -19,13 +19,7 @@ addons:
 before_script:
   - export CXX=g++-7
   - g++ -v && cmake --version
-  - which cmake
-  - git clone https://github.com/sfml/sfml && cd sfml
-  - git checkout tags/2.5.1
-  - mkdir build && cd build
-  - cmake ..
-  - sudo $(which cmake) --build . --target install
-  - cd ../..
+  - sudo ./install_SFML-2.5.1.sh
 script:
   - cd cmake-build-release
   - cmake ..
