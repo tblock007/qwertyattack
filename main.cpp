@@ -10,21 +10,26 @@ int main()
 {
    using namespace qa;
 
-   // Request a 24-bits depth buffer when creating the window
-   sf::ContextSettings contextSettings;
-   contextSettings.depthBits = 24;
+   std::cout << "About to default construct" << std::endl;
+   sf::Texture texture;
 
-   // Create the main window
-   // Create the window of the application
-   sf::RenderWindow window(sf::VideoMode(1280, 720, 32), "QWERTY Attack Prototype",
-                           sf::Style::Titlebar | sf::Style::Close);
-   window.setVerticalSyncEnabled(true);
+   std::cout << "Done default construct" << std::endl;
 
-   // Make it the active window for OpenGL calls
-   window.setActive();
-
-   SongRun run;
-   run.run("resources/keycharts/megustastu.kc", window);
+//   // Request a 24-bits depth buffer when creating the window
+//   sf::ContextSettings contextSettings;
+//   contextSettings.depthBits = 24;
+//
+//   // Create the main window
+//   // Create the window of the application
+//   sf::RenderWindow window(sf::VideoMode(1280, 720, 32), "QWERTY Attack Prototype",
+//                           sf::Style::Titlebar | sf::Style::Close);
+//   window.setVerticalSyncEnabled(true);
+//
+//   // Make it the active window for OpenGL calls
+//   window.setActive();
+//
+//   SongRun run;
+//   run.run("resources/keycharts/megustastu.kc", window);
 
    return EXIT_SUCCESS;
 }

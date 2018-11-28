@@ -8,6 +8,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - mesa-utils
       - libx11-dev
       - libxrandr-dev
       - libudev-dev
@@ -37,6 +38,6 @@ script:
   - cd resources/keynotes
   - ls -al
   - cd ../..
-  - xvfb-run ./test_qwertyattack
+  - xvfb-run ./qwerty_attack
 
 
