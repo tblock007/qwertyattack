@@ -6,9 +6,6 @@ namespace qa {
 TEST_CASE("Importing and extracting from KeyChart file #1", "[keychart]")
 {
    REQUIRE(1 == 1);
-   REQUIRE(18 == 18);
-   REQUIRE(2 + 3 == 5);
-   REQUIRE(0 == 1);
    //		KeyChart kut;
    //		kut.importFile("testdata/test1.kc");
    //
