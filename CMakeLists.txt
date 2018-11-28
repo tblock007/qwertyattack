@@ -28,7 +28,7 @@ if(1)
 
 	find_package(Threads)
 	include_directories("/usr/local/include")
-	link_directories("/usr/lib")
+	link_directories("/usr/local/lib")
 	target_link_libraries(qwertyattack ${CMAKE_THREAD_LIBS_INIT})
 	target_link_libraries(qwertyattack "/usr/local/lib/libsfml-audio.so")
 	target_link_libraries(qwertyattack "/usr/local/lib/libsfml-graphics.so")
