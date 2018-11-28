@@ -14,10 +14,16 @@ KeyChart::KeyChart()
    explodeGreatTexture_ = std::make_shared<sf::Texture>();
    explodeGoodTexture_ = std::make_shared<sf::Texture>();
 
+   std::cout << "created texture objects" << std::endl;
+
    pulseTexture_->loadFromFile(pulseTextureFile);
+    std::cout << "loaded pulse" << std::endl;
    disappearTexture_->loadFromFile(disappearTextureFile);
+    std::cout << "loaded disappear" << std::endl;
    explodeGreatTexture_->loadFromFile(explodeGreatTextureFile);
+    std::cout << "loaded great" << std::endl;
    explodeGoodTexture_->loadFromFile(explodeGoodTextureFile);
+    std::cout << "loaded good" << std::endl;
 }
 
 // ********************************************************************************
