@@ -8,6 +8,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - mesa-utils
       - freeglut3-dev
       - libxrandr-dev
       - libudev-dev
@@ -22,6 +23,9 @@ before_script:
   - ls -al
   - sudo cp -r SFML-2.5.1/include/SFML/ /usr/local/include/
   - sudo cp -r SFML-2.5.1/lib/SFML/ /usr/local/lib/
+  - ls -al /usr/local/include/SFML
+  - ls -al /usr/local/lib/SFML
+  - pwd
 script:
   - cd cmake-build-release
   - cmake ..
