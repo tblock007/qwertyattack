@@ -9,7 +9,9 @@ namespace qa {
 // ********************************************************************************
 KeyChart::KeyChart()
 {
+   std::cout << "in constructor" << std::endl;
    pulseTexture_ = std::make_shared<sf::Texture>();
+   std::cout << "made first texture pointer" << std::endl;
    disappearTexture_ = std::make_shared<sf::Texture>();
    explodeGreatTexture_ = std::make_shared<sf::Texture>();
    explodeGoodTexture_ = std::make_shared<sf::Texture>();
