@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cctype>
 #include <SFML/System.hpp>
+#include <cctype>
 
 namespace qa {
 enum class KeyNoteState { SCROLLING, DISAPPEARING, EXPLODING, DEAD, SEQUENCE_IN_PROGRESS };
@@ -32,7 +32,6 @@ static sf::Int64 constexpr minMicrosecondGood = (-1 * diffFrameGood) * diffMicro
 static sf::Int64 constexpr maxMicrosecondGood = (diffFrameGood + 1) * diffMicrosecondInterval;
 static sf::Int64 constexpr minMicrosecondGreat = (-1 * diffFrameGreat) * diffMicrosecondInterval;
 static sf::Int64 constexpr maxMicrosecondGreat = (diffFrameGreat + 1) * diffMicrosecondInterval;
-
 
 static float constexpr trackOffset = 100.0f;
 static float constexpr trackDistance = 150.0f;

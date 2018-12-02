@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include "SongRun.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
    using namespace qa;
 
@@ -24,7 +24,13 @@ int main()
    window.setActive();
 
    SongRun run;
-   run.run("resources/keycharts/megustastu.kc", window);
-
+   if (argc == 1) {
+      run.run("resources/keycharts/alphabet.kc", window);
+   }
+   else {
+      std::string chart = "resources/keycharts/";
+      chart += argv[1];
+      run.run(chart, window);
+   }
    return EXIT_SUCCESS;
 }
