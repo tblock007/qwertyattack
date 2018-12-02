@@ -18,11 +18,12 @@ set(SOURCE_FILES
 
 set(TEST_SOURCE_FILES
 		tests/catch.hpp
+		tests/test_BasicKeyNote.cpp
 		tests/test_KeyChart.cpp)
 
 
 
-if(1)
+if(LINUX)
 	add_executable(qwertyattack main.cpp ${SOURCE_FILES})
 	add_executable(test_qwertyattack tests/test_main.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 
@@ -37,7 +38,7 @@ if(1)
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-graphics.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-window.so")
 	target_link_libraries(test_qwertyattack "/usr/lib/SFML/libsfml-system.so")
-endif(1)
+endif(LINUX)
 
 
 
