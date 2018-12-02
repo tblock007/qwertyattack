@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cctype>
 #include <SFML/System.hpp>
 
 namespace qa {
@@ -24,16 +25,21 @@ static sf::Int32 constexpr explodeFrames = 33;
 static float constexpr zoneLeftBound = 40.0f;
 static float constexpr deathBound = -80.0f;
 
-static sf::Int32 constexpr diffFrameGood = 3;
-static sf::Int32 constexpr diffFrameGreat = 1;
-static sf::Int64 constexpr diffMicrosecondInterval = 17000;
+static sf::Int64 constexpr diffFrameGood = 3;
+static sf::Int64 constexpr diffFrameGreat = 1;
+static sf::Int64 constexpr diffMicrosecondInterval = 16667;
+static sf::Int64 constexpr minMicrosecondGood = (-1 * diffFrameGood) * diffMicrosecondInterval;
+static sf::Int64 constexpr maxMicrosecondGood = (diffFrameGood + 1) * diffMicrosecondInterval;
+static sf::Int64 constexpr minMicrosecondGreat = (-1 * diffFrameGreat) * diffMicrosecondInterval;
+static sf::Int64 constexpr maxMicrosecondGreat = (diffFrameGreat + 1) * diffMicrosecondInterval;
+
 
 static float constexpr trackOffset = 100.0f;
 static float constexpr trackDistance = 150.0f;
 static sf::Int64 constexpr microsecondsPerFrame = 16667;
 
-static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse_kor.png";
-static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear_kor.png";
+static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse.png";
+static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear.png";
 static std::string const explodeGreatTextureFile = "resources/keynotes/explode_great.png";
 static std::string const explodeGoodTextureFile = "resources/keynotes/explode_good.png";
 

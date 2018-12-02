@@ -94,9 +94,8 @@ std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf
    std::optional<Judgement> judgement;
    if (state_ == KeyNoteState::SCROLLING) {
       if (pressed.test(key_ - 'A')) {
-         // compute frame differential from ideal
-         sf::Int32 diffFrame = static_cast<sf::Int32>((timeElapsed - targetHitTime_) / diffMicrosecondInterval);
-         if (diffFrame >= (-1 * diffFrameGood + 1) && diffFrame <= diffFrameGood + 1) {
+         sf::Int64 diffMicroseconds = timeElapsed - targetHitTime_;
+         if (diffMicroseconds >= minMicrosecondGood && diffMicroseconds <= maxMicrosecondGood) {
             state_ = KeyNoteState::DISAPPEARING;
             hitTime_ = timeElapsed;
             image_.setPosition(zoneLeftBound, y_);
@@ -104,7 +103,7 @@ std::optional<Judgement> BasicKeyNote::sendKey(std::bitset<NUM_KEYS> pressed, sf
             image_.setTextureRect(
                 sf::IntRect(leftOffset + ((key_ - 'A') * pixelsBetweenSprites), topOffset, width, height));
 
-            if (diffFrame >= (-1 * diffFrameGreat + 1) && diffFrame <= diffFrameGreat + 1) {
+            if (diffMicroseconds >= minMicrosecondGreat && diffMicroseconds <= maxMicrosecondGreat) {
                judgement = Judgement::GREAT;
                explodeTexture_ = explodeGreatTexture_;
             }
