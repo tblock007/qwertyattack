@@ -6,7 +6,7 @@ namespace qa {
 TEST_CASE("Importing and extracting from KeyChart file #1", "[keychart]")
 {
    KeyChart kut;
-   kut.importFile("testdata/test1.kc");
+   kut.importFile("testdata/test1.kc", false);
 
    REQUIRE(kut.getSongFile() == "alphabet.ogg");
    REQUIRE(kut.getTitle() == "Alphabet Song");

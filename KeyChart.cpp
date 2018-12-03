@@ -73,9 +73,10 @@ std::string KeyChart::getGenre() const
 /// Loads the KeyNotes specified by a KeyChart input file
 /// </summary>
 /// <param name="fileName">The relative path to the file to be parsed and loaded</param>
+/// <param name="writeImportable">Specifies whether to write the generated importable section to the file</param>
 /// <changed>tblock,11/20/2018</changed>
 // ********************************************************************************
-void KeyChart::importFile(std::string fileName)
+void KeyChart::importFile(std::string fileName, bool writeImportable)
 {
    std::fstream keyChartFile(fileName);
    auto metaContents = getSectionContents("meta", keyChartFile);
@@ -85,7 +86,9 @@ void KeyChart::importFile(std::string fileName)
    std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
    if (importableContents.empty()) {
       importableContents = parseReadable(readableContents);
-      rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
+      if (writeImportable) {
+		rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
+	  }
    }
    parseImportable(importableContents);
 }

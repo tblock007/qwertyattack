@@ -25,7 +25,7 @@ class KeyChart {
 
    std::string getGenre() const;
 
-   void importFile(std::string fileName);
+   void importFile(std::string fileName, bool writeImportable);
 
    std::optional<std::shared_ptr<KeyNote>> getKeyNote(sf::Int64 timeElapsed);
 

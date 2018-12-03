@@ -38,7 +38,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow &window)
    JudgementTally scoreboard;
 
    KeyChart chart;
-   chart.importFile(keyChartFilePath);
+   chart.importFile(keyChartFilePath, true);
 
    sf::Music music;
    music.openFromFile("resources/songs/" + chart.getSongFile());
