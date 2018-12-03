@@ -87,8 +87,8 @@ void KeyChart::importFile(std::string fileName, bool writeImportable)
    if (importableContents.empty()) {
       importableContents = parseReadable(readableContents);
       if (writeImportable) {
-		rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
-	  }
+         rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
+      }
    }
    parseImportable(importableContents);
 }
