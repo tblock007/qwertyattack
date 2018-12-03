@@ -43,4 +43,17 @@ void JudgementTally::incrementTally(Judgement judgement)
    }
 }
 
+// ********************************************************************************
+/// <summary>
+/// Resets the counts of this JudgementTally to zero.
+/// </summary>
+/// <changed>tblock,12/3/2018</changed>
+// ********************************************************************************
+void JudgementTally::reset()
+{
+   greats_ = 0;
+   goods_ = 0;
+   misses_ = 0;
+}
+
 }  // namespace qa

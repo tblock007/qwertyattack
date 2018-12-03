@@ -16,6 +16,8 @@ class JudgementTally {
 
    void incrementTally(Judgement judgement);
 
+   void reset();
+
   private:
    sf::Int32 greats_;
    sf::Int32 goods_;
