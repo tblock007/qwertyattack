@@ -19,6 +19,7 @@ set(SOURCE_FILES
 set(TEST_SOURCE_FILES
 		tests/catch.hpp
 		tests/test_BasicKeyNote.cpp
+		tests/test_JudgementTally.cpp
 		tests/test_KeyChart.cpp)
 
 
