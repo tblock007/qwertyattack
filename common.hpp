@@ -25,8 +25,8 @@ static sf::Int32 constexpr explodeFrames = 33;
 static float constexpr zoneLeftBound = 40.0f;
 static float constexpr deathBound = -80.0f;
 
-static sf::Int64 constexpr diffFrameGood = 3;
-static sf::Int64 constexpr diffFrameGreat = 1;
+static sf::Int64 constexpr diffFrameGood = 4;
+static sf::Int64 constexpr diffFrameGreat = 2;
 static sf::Int64 constexpr diffMicrosecondInterval = 16667;
 static sf::Int64 constexpr minMicrosecondGood = (-1 * diffFrameGood) * diffMicrosecondInterval;
 static sf::Int64 constexpr maxMicrosecondGood = (diffFrameGood + 1) * diffMicrosecondInterval;
