@@ -5,24 +5,6 @@ ARTIST Misc
 GENRE Variety
 .END meta
 
-.BEGIN readable
-!OFFSET 10
-!BPM 120
-!BPLINE 4
-ABCD
-EFG.
-HIJK
-LMNOP...
-QRS.
-TUV.
-W.X.
-Y.Z.
-ABCD
-EFG.
-HIJK
-ZZZ.
-.END readable
-
 .BEGIN importable
 !DEFAULTSPEED 1
 A 10000000

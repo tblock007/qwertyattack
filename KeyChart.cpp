@@ -105,7 +105,7 @@ std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElaps
 {
    std::optional<std::shared_ptr<KeyNote>> result;
    if (!keyNoteStack_.empty()) {
-      if (timeElapsed > keyNoteStack_.back().first) {
+      if (timeElapsed >= keyNoteStack_.back().first) {
          result = keyNoteStack_.back().second;
          keyNoteStack_.pop_back();
       }
