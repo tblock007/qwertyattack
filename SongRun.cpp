@@ -77,6 +77,8 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow &window)
       // handle timing
       auto dt = frameClock.restart().asMicroseconds();
       float fps = 1000000.0f / dt;
+
+	  // DEBUG output
       if (fps < 50.0f) {
          std::cout << "FPS dropped to " << fps << " at frame " << frameCounter << std::endl;
       }
@@ -98,12 +100,13 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow &window)
           keynotes.end());
 
       // send the keys pressed to all KeyNotes to see if any hits or misses occur
-      for (auto kn : keynotes) {
+      for (auto&& kn : keynotes) {
          auto judgement = kn->sendKey(pressed, overallTime);
          if (judgement) {
             scoreboard.incrementTally(judgement.value());
          }
          judgement = kn->updateFrame(overallTime);  // note that this call returns a MISS judgement if the update causes
+
          // a KeyNote to scroll off the screen
          if (judgement) {
             scoreboard.incrementTally(judgement.value());
@@ -118,10 +121,10 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow &window)
       window.draw(bg);
       window.draw(fpsText);
 
-      for (auto kn : keynotes) {
+      for (auto&& kn : keynotes) {
          window.draw(*kn);
       }
-
+      
       window.draw(scoreboardText);
 
       window.display();

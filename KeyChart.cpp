@@ -159,7 +159,7 @@ std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, s
 void KeyChart::appendContents(std::ofstream &fout, std::string section, std::vector<std::string> const &contents)
 {
    fout << ".BEGIN " << section << std::endl;
-   for (auto const &line : contents) {
+   for (auto&& line : contents) {
       fout << line << std::endl;
    }
    fout << ".END " << section << std::endl << std::endl;
@@ -195,7 +195,7 @@ std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMe
 {
    std::string songFile, title, artist, genre;
 
-   for (auto const &line : metaContents) {
+   for (auto&& line : metaContents) {
       std::istringstream iss(line);
       std::string firstToken;
       iss >> firstToken;
@@ -232,7 +232,7 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    std::optional<float> bpm;
    std::optional<sf::Int32> bpl;
    float microsecondTime = 0.0f;
-   for (auto const &line : readableContents) {
+   for (auto&& line : readableContents) {
       if (!line.empty() && line[0] == '#') {
          continue;  // skip comment
       }
@@ -290,7 +290,7 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
 void KeyChart::parseImportable(std::vector<std::string> const &importableContents)
 {
    float defaultSpeedMultiplier = 1.0f;
-   for (auto const &line : importableContents) {
+   for (auto&& line : importableContents) {
       std::istringstream iss(line);
       std::string firstToken;
       iss >> firstToken;
