@@ -6,8 +6,10 @@
 #include <iostream>
 #include <vector>
 #include "BasicKeyNote.hpp"
+#include "DataKeyNotes.hpp"
 #include "JudgementTally.hpp"
 #include "KeyChart.hpp"
+#include "KeyPresses.hpp"
 #include "common.hpp"
 
 namespace qa {
@@ -20,7 +22,16 @@ namespace qa {
 // --------------------------------------------------------------------------------
 class SongRun {
   public:
+   SongRun();
    void run(std::string keyChartFilePath, sf::RenderWindow &window);
+   void run2(std::string keyChartFilePath, sf::RenderWindow &window);
+
+   private:
+   sf::Font fpsFont_;
+   sf::Text fpsText_;
+   sf::Text scoreboardText_;
+   sf::Texture bgTexture_;
+   sf::Sprite bg_;
 };
 
 }  // namespace qa

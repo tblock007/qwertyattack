@@ -8,11 +8,15 @@ set(SOURCE_FILES
 		common.hpp
 		BasicKeyNote.hpp
 		BasicKeyNote.cpp
+		DataKeyNotes.hpp
+		DataKeyNotes.cpp
 		JudgementTally.hpp
 		JudgementTally.cpp
 		KeyChart.hpp
 		KeyChart.cpp
 		KeyNote.hpp
+		KeyPresses.hpp 
+		KeyPresses.cpp
 		SongRun.hpp
 		SongRun.cpp)
 

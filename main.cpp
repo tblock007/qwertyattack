@@ -18,19 +18,19 @@ int main(int argc, char* argv[])
    // Create the window of the application
    sf::RenderWindow window(sf::VideoMode(1280, 720, 32), "QWERTY Attack Prototype",
                            sf::Style::Titlebar | sf::Style::Close);
-   window.setVerticalSyncEnabled(true);
+   window.setVerticalSyncEnabled(false);
 
    // Make it the active window for OpenGL calls
    window.setActive();
 
    SongRun run;
    if (argc == 1) {
-      run.run("resources/keycharts/alphabet.kc", window);
+      run.run2("resources/keycharts/megustastu.kc", window);
    }
    else {
       std::string chart = "resources/keycharts/";
       chart += argv[1];
-      run.run(chart, window);
+      run.run2(chart, window);
    }
    return EXIT_SUCCESS;
 }

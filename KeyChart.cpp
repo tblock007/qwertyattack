@@ -93,6 +93,24 @@ void KeyChart::importFile(std::string fileName, bool writeImportable)
    parseImportable(importableContents);
 }
 
+// temporary
+void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture)
+{
+   std::fstream keyChartFile(fileName);
+   auto metaContents = getSectionContents("meta", keyChartFile);
+   auto readableContents = getSectionContents("readable", keyChartFile);
+   auto importableContents = getSectionContents("importable", keyChartFile);
+
+   std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
+   if (importableContents.empty()) {
+      importableContents = parseReadable(readableContents);
+      if (writeImportable) {
+         rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
+      }
+   }
+   parseImportable(importableContents, data, initTexture);
+}
+
 // ********************************************************************************
 /// <summary>
 /// Checks the upcoming KeyNotes to see if the upcoming KeyNotes are soon enough to be loaded
@@ -324,5 +342,109 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
    std::sort(keyNoteStack_.begin(), keyNoteStack_.end(),
              [](TimePointerPair const &lhs, TimePointerPair const &rhs) -> bool { return lhs.first > rhs.first; });
 }
+
+
+// temporary
+void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes& data, sf::Texture& initTexture)
+{
+   data.xs_.clear();
+   data.ys_.clear();
+   data.speeds_.clear();
+   data.hitTimes_.clear();
+   data.targetHitTimes_.clear();
+   data.appearTimes_.clear();
+   data.disappearTimes_.clear();
+   data.states_.clear();
+   data.keys_.clear();
+   data.sprites_.clear();
+
+   float defaultSpeedMultiplier = 1.0f;
+   for (auto &&line : importableContents) {
+      std::istringstream iss(line);
+      std::string firstToken;
+      iss >> firstToken;
+      if (firstToken == "!DEFAULTSPEED") {
+         iss >> defaultSpeedMultiplier;
+      }
+      else if (firstToken.size() == 1 && firstToken[0] >= 'A' && firstToken[0] <= 'Z') {
+         char c;
+         sf::Uint32 targetHitTime;
+         float speedMultiplier;
+
+         c = firstToken[0];
+         iss >> targetHitTime;
+         if (!(iss >> speedMultiplier)) {
+            speedMultiplier = defaultSpeedMultiplier;
+         }
+         sf::Uint32 offscreenLoadTime
+             = targetHitTime
+               - static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
+         sf::Uint32 offscreenUnloadTime = offscreenLoadTime + static_cast<sf::Uint32>((2 * pixelThreshold + fullscreenWidth) / (speedMultiplier * keyNoteSpeed));
+
+		 data.xs_.emplace_back(targetHitTime * (speedMultiplier * keyNoteSpeed) + zoneLeftBound);
+         data.ys_.emplace_back(charToY(c));
+         data.speeds_.emplace_back(speedMultiplier * keyNoteSpeed);
+         data.hitTimes_.emplace_back(0);
+         data.targetHitTimes_.emplace_back(targetHitTime);
+         data.appearTimes_.emplace_back(offscreenLoadTime);
+         data.disappearTimes_.emplace_back(offscreenUnloadTime);
+         data.states_.emplace_back(KeyNoteState::SCROLLING);
+         data.keys_.emplace_back(c);
+         data.sprites_.emplace_back(
+             initTexture, sf::IntRect(leftOffset + ((c - 'A') * pixelsBetweenSprites), topOffset, width, height));
+      }
+      else {
+         // error: invalid line in importable
+      }
+   }
+
+   // populate the stack now that we can extract the KeyNotes in targetHitTime order
+   std::sort(keyNoteStack_.begin(), keyNoteStack_.end(),
+             [](TimePointerPair const &lhs, TimePointerPair const &rhs) -> bool { return lhs.first > rhs.first; });
+}
+
+float KeyChart::charToY(char c)
+{
+   sf::Uint32 track = 0;
+   switch (c) {
+      case 'Q':
+      case 'W':
+      case 'E':
+      case 'R':
+      case 'T':
+      case 'Y':
+      case 'U':
+      case 'I':
+      case 'O':
+      case 'P':
+         track = 0;
+         break;
+
+      case 'A':
+      case 'S':
+      case 'D':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'J':
+      case 'K':
+      case 'L':
+         track = 1;
+         break;
+
+      case 'Z':
+      case 'X':
+      case 'C':
+      case 'V':
+      case 'B':
+      case 'N':
+      case 'M':
+         track = 2;
+         break;
+   }
+
+   return trackOffset + (track * trackDistance);
+}
+
 
 }  // namespace qa
