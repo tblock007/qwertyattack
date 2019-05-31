@@ -8,6 +8,9 @@ enum class KeyNoteState { SCROLLING, DISAPPEARING, EXPLODING, DEAD, SEQUENCE_IN_
 enum class Judgement { GREAT, GOOD, MISS };
 
 // TODO: organize these - perhaps an entity that stores global configuration parameters
+
+static unsigned int constexpr frameLimit = 144;
+
 static sf::Uint32 constexpr pixelThreshold
     = 640;  // buffer half a screen of KeyNotes (technically a problem if KeyNotes start travelling too fast)
 static sf::Uint32 constexpr fullscreenWidth = 1280;

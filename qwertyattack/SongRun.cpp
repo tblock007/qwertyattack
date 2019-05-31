@@ -72,12 +72,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       // DEBUG
       auto dt = frameClock.restart().asMicroseconds();
       float fps = 1000000.0f / dt;
-      if (fps < 30.0f) {
-         std::cout << "FPS dropped to " << fps << " at frame " << frameCounter << std::endl;
-      }
-      if (frameCounter % 600 == 0) {
-         std::cout << "FPS: " << fps << std::endl;
-	  }
+
 
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
