@@ -25,12 +25,12 @@ int main(int argc, char* argv[])
 
    SongRun run;
    if (argc == 1) {
-      run.run2("resources/keycharts/megustastu.kc", window);
+      run.run("resources/keycharts/megustastu.kc", window);
    }
    else {
       std::string chart = "resources/keycharts/";
       chart += argv[1];
-      run.run2(chart, window);
+      run.run(chart, window);
    }
    return EXIT_SUCCESS;
 }

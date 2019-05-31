@@ -37,8 +37,8 @@ static float constexpr trackOffset = 100.0f;
 static float constexpr trackDistance = 150.0f;
 static sf::Uint32 constexpr microsecondsPerFrame = 16667;
 
-static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse_kor.png";
-static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear_kor.png";
+static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse.png";
+static std::string const disappearTextureFile = "resources/keynotes/keynote_disappear.png";
 static std::string const explodeGreatTextureFile = "resources/keynotes/explode_great.png";
 static std::string const explodeGoodTextureFile = "resources/keynotes/explode_good.png";
 

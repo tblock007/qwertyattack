@@ -26,7 +26,6 @@ class KeyChart {
 
    std::string getGenre() const;
 
-   void importFile(std::string fileName, bool writeImportable);
    void importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture);
 
    std::optional<std::shared_ptr<KeyNote>> getKeyNote(sf::Int64 timeElapsed);
@@ -60,7 +59,6 @@ class KeyChart {
 
    std::vector<std::string> parseReadable(std::vector<std::string> const &readableContents);
 
-   void parseImportable(std::vector<std::string> const &importableContents);
    void parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes& data, sf::Texture& initTexture);
 
    float charToY(char c);

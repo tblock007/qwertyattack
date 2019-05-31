@@ -68,32 +68,8 @@ std::string KeyChart::getGenre() const
    return genre_;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Loads the KeyNotes specified by a KeyChart input file
-/// </summary>
-/// <param name="fileName">The relative path to the file to be parsed and loaded</param>
-/// <param name="writeImportable">Specifies whether to write the generated importable section to the file</param>
-/// <changed>tblock,11/20/2018</changed>
-// ********************************************************************************
-void KeyChart::importFile(std::string fileName, bool writeImportable)
-{
-   std::fstream keyChartFile(fileName);
-   auto metaContents = getSectionContents("meta", keyChartFile);
-   auto readableContents = getSectionContents("readable", keyChartFile);
-   auto importableContents = getSectionContents("importable", keyChartFile);
 
-   std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
-   if (importableContents.empty()) {
-      importableContents = parseReadable(readableContents);
-      if (writeImportable) {
-         rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
-      }
-   }
-   parseImportable(importableContents);
-}
-
-// temporary
+// TODO: clean up this interface
 void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture)
 {
    std::fstream keyChartFile(fileName);
@@ -298,53 +274,8 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    return result;
 }
 
-// --------------------------------------------------------------------------------
-/// <summary>
-/// Parses the contents of the importable section to generate the actual KeyNote entities
-/// </summary>
-/// <param name="importableContents">The lines read from the importable section</param>
-/// <changed>tblock,11/20/2018</changed>
-// --------------------------------------------------------------------------------
-void KeyChart::parseImportable(std::vector<std::string> const &importableContents)
-{
-   float defaultSpeedMultiplier = 1.0f;
-   for (auto&& line : importableContents) {
-      std::istringstream iss(line);
-      std::string firstToken;
-      iss >> firstToken;
-      if (firstToken == "!DEFAULTSPEED") {
-         iss >> defaultSpeedMultiplier;
-      }
-      else if (firstToken.size() == 1 && firstToken[0] >= 'A' && firstToken[0] <= 'Z') {
-         char c;
-         sf::Int64 targetHitTime;
-         float speedMultiplier;
 
-         c = firstToken[0];
-         iss >> targetHitTime;
-         if (!(iss >> speedMultiplier)) {
-            speedMultiplier = defaultSpeedMultiplier;
-         }
-         sf::Int64 offscreenLoadTime
-             = targetHitTime
-               - static_cast<sf::Int64>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-         keyNoteStack_.emplace_back(
-             offscreenLoadTime,
-             std::make_shared<BasicKeyNote>(c, (speedMultiplier * keyNoteSpeed), targetHitTime, pulseTexture_,
-                                            disappearTexture_, explodeGreatTexture_, explodeGoodTexture_));
-      }
-      else {
-         // error: invalid line in importable
-      }
-   }
-
-   // populate the stack now that we can extract the KeyNotes in targetHitTime order
-   std::sort(keyNoteStack_.begin(), keyNoteStack_.end(),
-             [](TimePointerPair const &lhs, TimePointerPair const &rhs) -> bool { return lhs.first > rhs.first; });
-}
-
-
-// temporary
+// TODO: clean up this interface
 void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes& data, sf::Texture& initTexture)
 {
    data.xs_.clear();
@@ -397,10 +328,6 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          // error: invalid line in importable
       }
    }
-
-   // populate the stack now that we can extract the KeyNotes in targetHitTime order
-   std::sort(keyNoteStack_.begin(), keyNoteStack_.end(),
-             [](TimePointerPair const &lhs, TimePointerPair const &rhs) -> bool { return lhs.first > rhs.first; });
 }
 
 float KeyChart::charToY(char c)
