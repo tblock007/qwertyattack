@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
    // Create the main window
    // Create the window of the application
    // NOTE: for NVIDIA graphics cards, turn off Threaded Optimization to get rid of stutter
+   // https://stackoverflow.com/questions/36959508/nvidia-graphics-driver-causing-noticeable-frame-stuttering
    sf::RenderWindow window(sf::VideoMode(1280, 720, 32), "QWERTY Attack Prototype",
                            sf::Style::Titlebar | sf::Style::Close);
    window.setVerticalSyncEnabled(false);
