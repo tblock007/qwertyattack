@@ -15,7 +15,7 @@ class DataKeyNotes : public sf::Drawable {
   public:
    void updateDelimiters(sf::Uint32 usElapsed);
    void updatePositions(sf::Uint32 usElapsed, JudgementTally& tally);
-   void updateStates(sf::Uint32 usElapsed, KeyPresses keys, JudgementTally& tally);
+   void updateStates(sf::Uint32 usElapsed, KeyPresses& keys, JudgementTally& tally);
    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
    
 

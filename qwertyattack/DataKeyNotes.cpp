@@ -21,10 +21,10 @@ void DataKeyNotes::updatePositions(sf::Uint32 usElapsed, JudgementTally& tally)
    }
 }
 
-void DataKeyNotes::updateStates(sf::Uint32 usElapsed, KeyPresses keys, JudgementTally& tally)
+void DataKeyNotes::updateStates(sf::Uint32 usElapsed, KeyPresses& keys, JudgementTally& tally)
 {
    for (size_t i = head_; i < tail_; i++) {
-      if (keys.isPressed(static_cast<sf::Uint32>(keys_[i] - 'A'))) {
+      if (keys.isPressed(keys_[i])) {
          sf::Uint32 usDiff = usElapsed - targetHitTimes_[i];
          if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood) {
 
@@ -40,7 +40,9 @@ void DataKeyNotes::updateStates(sf::Uint32 usElapsed, KeyPresses keys, Judgement
             // sprites_[i].setTexture(explodeTexture);
 			// sprites_[i].setTextureRect(
             //    sf::IntRect(leftOffset + ((keys_[i] - 'A') * pixelsBetweenSprites), topOffset, width, height));
-         }
+			
+			keys.resetPressed(keys_[i]);
+		 }
       }
    }
 }
