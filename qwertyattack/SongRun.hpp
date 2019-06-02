@@ -5,7 +5,6 @@
 #include <bitset>
 #include <iostream>
 #include <vector>
-#include "BasicKeyNote.hpp"
 #include "DataKeyNotes.hpp"
 #include "JudgementTally.hpp"
 #include "KeyChart.hpp"

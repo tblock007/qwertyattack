@@ -87,25 +87,7 @@ void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNot
    parseImportable(importableContents, data, initTexture);
 }
 
-// ********************************************************************************
-/// <summary>
-/// Checks the upcoming KeyNotes to see if the upcoming KeyNotes are soon enough to be loaded
-/// </summary>
-/// <param name="timeElapsed">A (relative) time in microseconds indicating time elapsed since some reference; used to
-/// determine whether a KeyNote should be returned</param> <returns>An optional pointer to KeyNote that points to the
-/// KeyNote to be added to the list of entities, if present</returns> <changed>tblock,11/17/2018</changed>
-// ********************************************************************************
-std::optional<std::shared_ptr<KeyNote>> KeyChart::getKeyNote(sf::Int64 timeElapsed)
-{
-   std::optional<std::shared_ptr<KeyNote>> result;
-   if (!keyNoteStack_.empty()) {
-      if (timeElapsed >= keyNoteStack_.back().first) {
-         result = keyNoteStack_.back().second;
-         keyNoteStack_.pop_back();
-      }
-   }
-   return result;
-}
+
 
 // ********************************************************************************
 /// <summary>

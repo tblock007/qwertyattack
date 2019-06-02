@@ -6,15 +6,12 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-build-release/)
 
 set(SOURCE_FILES
 		common.hpp
-		BasicKeyNote.hpp
-		BasicKeyNote.cpp
 		DataKeyNotes.hpp
 		DataKeyNotes.cpp
 		JudgementTally.hpp
 		JudgementTally.cpp
 		KeyChart.hpp
 		KeyChart.cpp
-		KeyNote.hpp
 		KeyPresses.hpp 
 		KeyPresses.cpp
 		SongRun.hpp
@@ -22,7 +19,6 @@ set(SOURCE_FILES
 
 set(TEST_SOURCE_FILES
 		tests/catch.hpp
-		tests/test_BasicKeyNote.cpp
 		tests/test_JudgementTally.cpp
 		tests/test_KeyChart.cpp)
 

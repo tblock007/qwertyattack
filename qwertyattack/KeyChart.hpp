@@ -4,7 +4,6 @@
 #include <optional>
 #include <sstream>
 #include <vector>
-#include "BasicKeyNote.hpp"
 #include "common.hpp"
 #include "DataKeyNotes.hpp"
 
@@ -28,13 +27,9 @@ class KeyChart {
 
    void importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture);
 
-   std::optional<std::shared_ptr<KeyNote>> getKeyNote(sf::Int64 timeElapsed);
-
    void fillData(DataKeyNotes &data);
 
   private:
-   using TimePointerPair = std::pair<sf::Int64, std::shared_ptr<KeyNote>>;
-   std::vector<TimePointerPair> keyNoteStack_;
 
    std::string songFile_;
    std::string title_;
