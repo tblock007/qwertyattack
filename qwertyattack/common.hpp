@@ -4,7 +4,7 @@
 #include <cctype>
 
 namespace qa {
-enum class KeyNoteState { SCROLLING, DISAPPEARING, EXPLODING, DEAD, SEQUENCE_IN_PROGRESS };
+enum class KeyNoteState { LIVE, DEAD, DISAPPEARING, MISSED, SEQUENCE_IN_PROGRESS };
 enum class Judgement { GREAT, GOOD, MISS };
 
 // TODO: organize these - perhaps an entity that stores global configuration parameters

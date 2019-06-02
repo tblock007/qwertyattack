@@ -267,6 +267,7 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
    data.targetHitTimes_.clear();
    data.appearTimes_.clear();
    data.disappearTimes_.clear();
+   data.missTimes_.clear();
    data.states_.clear();
    data.keys_.clear();
    data.sprites_.clear();
@@ -301,7 +302,8 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          data.targetHitTimes_.emplace_back(targetHitTime);
          data.appearTimes_.emplace_back(offscreenLoadTime);
          data.disappearTimes_.emplace_back(offscreenUnloadTime);
-         data.states_.emplace_back(KeyNoteState::SCROLLING);
+         data.missTimes_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
+         data.states_.emplace_back(KeyNoteState::LIVE);
          data.keys_.emplace_back(c);
          data.sprites_.emplace_back(
              initTexture, sf::IntRect(leftOffset + ((c - 'A') * pixelsBetweenSprites), topOffset, width, height));

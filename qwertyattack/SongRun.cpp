@@ -76,7 +76,6 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
 
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
-      // TODO: implement miss detection, hit detection, decide how speed will be "set to 0"
       data.updateDelimiters(usElapsed);
       data.updatePositions(usElapsed, scoreboard);
       data.updateStates(usElapsed, scoreboard, keys);

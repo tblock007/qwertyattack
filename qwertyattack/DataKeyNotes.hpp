@@ -32,6 +32,7 @@ class DataKeyNotes : public sf::Drawable {
    std::vector<sf::Uint32> targetHitTimes_;
    std::vector<sf::Uint32> appearTimes_;
    std::vector<sf::Uint32> disappearTimes_;
+   std::vector<sf::Uint32> missTimes_;
 
    std::vector<KeyNoteState> states_;
    std::vector<char> keys_;

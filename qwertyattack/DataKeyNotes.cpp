@@ -25,10 +25,13 @@ void DataKeyNotes::updatePositions(sf::Uint32 usElapsed, JudgementTally& tally)
 void DataKeyNotes::updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys)
 {
    for (size_t i = head_; i < tail_; i++) {
-      if (keys.isPressed(keys_[i])) {
+      if (usElapsed > missTimes_[i] && states_[i] == KeyNoteState::LIVE) {
+         tally.incrementTally(Judgement::MISS);
+         states_[i] = KeyNoteState::MISSED;
+      }
+      else if (keys.isPressed(keys_[i])) {
          sf::Int64 usDiff = timeDiff(targetHitTimes_[i], usElapsed);
-		 if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood)
-         {
+         if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood) {
             hitTimes_[i] = usElapsed;
             states_[i] = KeyNoteState::DEAD;  // TODO: set this to exploding animation
 
