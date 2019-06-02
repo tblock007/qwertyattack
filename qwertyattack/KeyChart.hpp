@@ -4,8 +4,8 @@
 #include <optional>
 #include <sstream>
 #include <vector>
-#include "common.hpp"
 #include "DataKeyNotes.hpp"
+#include "common.hpp"
 
 namespace qa {
 // --------------------------------------------------------------------------------
@@ -25,12 +25,11 @@ class KeyChart {
 
    std::string getGenre() const;
 
-   void importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture);
+   void importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture);
 
    void fillData(DataKeyNotes &data);
 
   private:
-
    std::string songFile_;
    std::string title_;
    std::string artist_;
@@ -54,7 +53,8 @@ class KeyChart {
 
    std::vector<std::string> parseReadable(std::vector<std::string> const &readableContents);
 
-   void parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes& data, sf::Texture& initTexture);
+   void parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
+                        sf::Texture &initTexture);
 
    float charToY(char c);
 };

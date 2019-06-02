@@ -24,7 +24,7 @@ class SongRun {
    SongRun();
    void run(std::string keyChartFilePath, sf::RenderWindow &window);
 
-   private:
+  private:
    sf::Font fpsFont_;
    sf::Text fpsText_;
    sf::Text scoreboardText_;

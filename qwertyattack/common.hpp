@@ -64,6 +64,6 @@ static inline void trim(std::string& s)
 
 static inline sf::Int64 timeDiff(sf::Uint32 a, sf::Uint32 b)
 {
-   return static_cast<sf::Int64>(a) - static_cast<sf::Int64>(b);	
+   return static_cast<sf::Int64>(a) - static_cast<sf::Int64>(b);
 }
 }  // namespace qa

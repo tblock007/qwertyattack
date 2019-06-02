@@ -68,9 +68,8 @@ std::string KeyChart::getGenre() const
    return genre_;
 }
 
-
 // TODO: clean up this interface
-void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes& data, sf::Texture& initTexture)
+void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture)
 {
    std::fstream keyChartFile(fileName);
    auto metaContents = getSectionContents("meta", keyChartFile);
@@ -86,8 +85,6 @@ void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNot
    }
    parseImportable(importableContents, data, initTexture);
 }
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -135,7 +132,7 @@ std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, s
 void KeyChart::appendContents(std::ofstream &fout, std::string section, std::vector<std::string> const &contents)
 {
    fout << ".BEGIN " << section << std::endl;
-   for (auto&& line : contents) {
+   for (auto &&line : contents) {
       fout << line << std::endl;
    }
    fout << ".END " << section << std::endl << std::endl;
@@ -171,7 +168,7 @@ std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMe
 {
    std::string songFile, title, artist, genre;
 
-   for (auto&& line : metaContents) {
+   for (auto &&line : metaContents) {
       std::istringstream iss(line);
       std::string firstToken;
       iss >> firstToken;
@@ -208,7 +205,7 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    std::optional<float> bpm;
    std::optional<sf::Int32> bpl;
    float microsecondTime = 0.0f;
-   for (auto&& line : readableContents) {
+   for (auto &&line : readableContents) {
       if (!line.empty() && line[0] == '#') {
          continue;  // skip comment
       }
@@ -256,9 +253,10 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    return result;
 }
 
-
 // TODO: clean up this interface
-void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes& data, sf::Texture& initTexture)
+// TODO: handle poor input (e.g., negative target hit times, bad characters)
+void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
+                               sf::Texture &initTexture)
 {
    data.xs_.clear();
    data.ys_.clear();
@@ -290,12 +288,18 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          if (!(iss >> speedMultiplier)) {
             speedMultiplier = defaultSpeedMultiplier;
          }
-         sf::Uint32 offscreenLoadTime
-             = targetHitTime
-               - static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-         sf::Uint32 offscreenUnloadTime = targetHitTime + static_cast<sf::Uint32>(fullscreenWidth / (speedMultiplier * keyNoteSpeed));
-		 
-		 data.xs_.emplace_back(targetHitTime * (speedMultiplier * keyNoteSpeed) + zoneLeftBound);
+
+         sf::Uint32 offscreenLoadTime = 0;
+         if (targetHitTime
+             > static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed))) {
+            offscreenLoadTime
+                = targetHitTime
+                  - static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
+         }
+         sf::Uint32 offscreenUnloadTime
+             = targetHitTime + static_cast<sf::Uint32>(fullscreenWidth / (speedMultiplier * keyNoteSpeed));
+
+         data.xs_.emplace_back(targetHitTime * (speedMultiplier * keyNoteSpeed) + zoneLeftBound);
          data.ys_.emplace_back(charToY(c));
          data.speeds_.emplace_back(speedMultiplier * keyNoteSpeed);
          data.hitTimes_.emplace_back(0);

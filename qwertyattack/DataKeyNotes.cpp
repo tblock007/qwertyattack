@@ -32,7 +32,7 @@ void DataKeyNotes::updateStates(sf::Uint32 usElapsed, JudgementTally& tally, Key
       else if (keys.isPressed(keys_[i])) {
          sf::Int64 usDiff = timeDiff(targetHitTimes_[i], usElapsed);
          if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood) {
-            hitTimes_[i] = usElapsed;
+            hitTimes_[i] = usElapsed;         // TODO: consider removing
             states_[i] = KeyNoteState::DEAD;  // TODO: set this to exploding animation
 
             if (usDiff >= minMicrosecondGreat && usDiff <= maxMicrosecondGreat) {

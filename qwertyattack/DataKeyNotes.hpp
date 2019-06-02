@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "SFML/Graphics.hpp"
-#include "common.hpp"
 #include "JudgementTally.hpp"
 #include "KeyPresses.hpp"
+#include "SFML/Graphics.hpp"
+#include "common.hpp"
 
 namespace qa {
 // --------------------------------------------------------------------------------
@@ -16,12 +16,10 @@ class DataKeyNotes : public sf::Drawable {
    void updateDelimiters(sf::Uint32 usElapsed);
    void updatePositions(sf::Uint32 usElapsed);
    void updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys);
-   void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-   
+   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   private:
-
-	  friend class KeyChart;
+   friend class KeyChart;
 
    size_t head_ = 0;
    size_t tail_ = 0;
@@ -38,6 +36,5 @@ class DataKeyNotes : public sf::Drawable {
    std::vector<char> keys_;
 
    std::vector<sf::Sprite> sprites_;
-
 };
 }  // namespace qa

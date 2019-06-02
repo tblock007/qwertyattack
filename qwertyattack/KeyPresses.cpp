@@ -23,8 +23,6 @@ KeyPresses::KeyPresses(sf::Int32 mask) : pressMask_(mask)
 {
 }
 
-
-
 // ********************************************************************************
 /// <summary>
 /// Resets the KeyPresses mask to indicate that no keys were pressed
@@ -35,8 +33,6 @@ void KeyPresses::reset()
 {
    pressMask_ = 0;
 }
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -51,8 +47,6 @@ bool KeyPresses::isPressed(sf::Uint32 i) const
    return ((pressMask_ & (1 << i)) != 0);
 }
 
-
-
 // ********************************************************************************
 /// <summary>
 /// Queries whether a character was pressed, as indicated by this KeyPresses instance
@@ -66,8 +60,6 @@ bool KeyPresses::isPressed(char c) const
    return isPressed(static_cast<sf::Uint32>(c) - static_cast<sf::Uint32>('A'));
 }
 
-
-
 // ********************************************************************************
 /// <summary>
 /// Indicates that the key was pressed in this KeyPresses
@@ -79,8 +71,6 @@ void KeyPresses::setPressed(sf::Uint32 i)
 {
    pressMask_ = pressMask_ | (1 << i);
 }
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -94,11 +84,9 @@ void KeyPresses::setPressed(char c)
    setPressed(static_cast<sf::Uint32>(c) - static_cast<sf::Uint32>('A'));
 }
 
-
-
 // ********************************************************************************
 /// <summary>
-/// Removes the pressed status of the key.  Used to acknowledge pressed status so that 
+/// Removes the pressed status of the key.  Used to acknowledge pressed status so that
 /// only one KeyNote is destroyed for any given key press.
 /// </summary>
 /// <param name="i">The index being reset</param>
@@ -108,8 +96,6 @@ void KeyPresses::resetPressed(sf::Uint32 i)
 {
    pressMask_ = pressMask_ & ~(1 << i);
 }
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -123,6 +109,5 @@ void KeyPresses::resetPressed(char c)
 {
    resetPressed(static_cast<sf::Uint32>(c) - static_cast<sf::Uint32>('A'));
 }
-
 
 }  // namespace qa
