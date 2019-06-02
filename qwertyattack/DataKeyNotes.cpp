@@ -16,19 +16,21 @@ void DataKeyNotes::updateDelimiters(sf::Uint32 usElapsed)
 void DataKeyNotes::updatePositions(sf::Uint32 usElapsed, JudgementTally& tally)
 {
    for (size_t i = head_; i < tail_; i++) {
-      xs_[i] = (targetHitTimes_[i] - usElapsed) * speeds_[i] + zoneLeftBound;
+      sf::Int64 usDiff = timeDiff(targetHitTimes_[i], usElapsed);
+      xs_[i] = usDiff * speeds_[i] + zoneLeftBound;
       sprites_[i].setPosition(xs_[i], ys_[i]);
    }
 }
 
-void DataKeyNotes::updateStates(sf::Uint32 usElapsed, KeyPresses& keys, JudgementTally& tally)
+void DataKeyNotes::updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys)
 {
    for (size_t i = head_; i < tail_; i++) {
       if (keys.isPressed(keys_[i])) {
-         sf::Uint32 usDiff = usElapsed - targetHitTimes_[i];
-         if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood) {
-
+         sf::Int64 usDiff = timeDiff(targetHitTimes_[i], usElapsed);
+		 if (usDiff >= minMicrosecondGood && usDiff <= maxMicrosecondGood)
+         {
             hitTimes_[i] = usElapsed;
+            states_[i] = KeyNoteState::DEAD;  // TODO: set this to exploding animation
 
             if (usDiff >= minMicrosecondGreat && usDiff <= maxMicrosecondGreat) {
                tally.incrementTally(Judgement::GREAT);
@@ -38,18 +40,20 @@ void DataKeyNotes::updateStates(sf::Uint32 usElapsed, KeyPresses& keys, Judgemen
             }
 
             // sprites_[i].setTexture(explodeTexture);
-			// sprites_[i].setTextureRect(
+            // sprites_[i].setTextureRect(
             //    sf::IntRect(leftOffset + ((keys_[i] - 'A') * pixelsBetweenSprites), topOffset, width, height));
-			
-			keys.resetPressed(keys_[i]);
-		 }
+
+            keys.resetPressed(keys_[i]);
+         }
       }
    }
 }
-void DataKeyNotes::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void DataKeyNotes::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
    for (size_t i = head_; i < tail_; i++) {
-      target.draw(sprites_[i]);
+      if (states_[i] != KeyNoteState::DEAD) {
+         target.draw(sprites_[i]);
+      }
    }
 }
 

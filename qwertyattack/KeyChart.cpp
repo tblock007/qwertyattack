@@ -310,8 +310,8 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          sf::Uint32 offscreenLoadTime
              = targetHitTime
                - static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-         sf::Uint32 offscreenUnloadTime = offscreenLoadTime + static_cast<sf::Uint32>((2 * pixelThreshold + fullscreenWidth) / (speedMultiplier * keyNoteSpeed));
-
+         sf::Uint32 offscreenUnloadTime = targetHitTime + static_cast<sf::Uint32>(fullscreenWidth / (speedMultiplier * keyNoteSpeed));
+		 
 		 data.xs_.emplace_back(targetHitTime * (speedMultiplier * keyNoteSpeed) + zoneLeftBound);
          data.ys_.emplace_back(charToY(c));
          data.speeds_.emplace_back(speedMultiplier * keyNoteSpeed);

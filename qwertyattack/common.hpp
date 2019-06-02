@@ -28,6 +28,7 @@ static sf::Uint32 constexpr explodeFrames = 33;
 static float constexpr zoneLeftBound = 40.0f;
 static float constexpr deathBound = -80.0f;
 
+// TODO: consider how to set min/max in the context of frame rate
 static sf::Int64 constexpr diffFrameGood = 4;
 static sf::Int64 constexpr diffFrameGreat = 2;
 static sf::Int64 constexpr diffMicrosecondInterval = 16667;
@@ -59,5 +60,10 @@ static inline void trim(std::string& s)
 {
    ltrim(s);
    rtrim(s);
+}
+
+static inline sf::Int64 timeDiff(sf::Uint32 a, sf::Uint32 b)
+{
+   return static_cast<sf::Int64>(a) - static_cast<sf::Int64>(b);	
 }
 }  // namespace qa

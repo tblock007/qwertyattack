@@ -79,7 +79,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       // TODO: implement miss detection, hit detection, decide how speed will be "set to 0"
       data.updateDelimiters(usElapsed);
       data.updatePositions(usElapsed, scoreboard);
-      data.updateStates(usElapsed, keys, scoreboard);
+      data.updateStates(usElapsed, scoreboard, keys);
 
       auto [greats, goods, misses] = scoreboard.getTallies();
       scoreboardText_.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods)
