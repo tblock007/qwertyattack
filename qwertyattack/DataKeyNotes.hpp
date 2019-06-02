@@ -14,7 +14,7 @@ namespace qa {
 class DataKeyNotes : public sf::Drawable {
   public:
    void updateDelimiters(sf::Uint32 usElapsed);
-   void updatePositions(sf::Uint32 usElapsed, JudgementTally& tally);
+   void updatePositions(sf::Uint32 usElapsed);
    void updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys);
    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
    

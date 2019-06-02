@@ -13,7 +13,7 @@ void DataKeyNotes::updateDelimiters(sf::Uint32 usElapsed)
    }
 }
 
-void DataKeyNotes::updatePositions(sf::Uint32 usElapsed, JudgementTally& tally)
+void DataKeyNotes::updatePositions(sf::Uint32 usElapsed)
 {
    for (size_t i = head_; i < tail_; i++) {
       sf::Int64 usDiff = timeDiff(targetHitTimes_[i], usElapsed);

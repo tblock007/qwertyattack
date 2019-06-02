@@ -72,12 +72,15 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       // DEBUG
       auto dt = frameClock.restart().asMicroseconds();
       float fps = 1000000.0f / dt;
+      /*if (frameCounter % 1000 == 0) {
+         std::cout << "FPS: " << fps << std::endl;
+	  }*/
 
 
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
       data.updateDelimiters(usElapsed);
-      data.updatePositions(usElapsed, scoreboard);
+      data.updatePositions(usElapsed);
       data.updateStates(usElapsed, scoreboard, keys);
 
       auto [greats, goods, misses] = scoreboard.getTallies();
