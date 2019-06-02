@@ -357,5 +357,4 @@ float KeyChart::charToY(char c)
    return trackOffset + (track * trackDistance);
 }
 
-
 }  // namespace qa
