@@ -9,15 +9,10 @@ namespace qa {
 // ********************************************************************************
 KeyChart::KeyChart()
 {
-   pulseTexture_ = std::make_shared<sf::Texture>();
-   disappearTexture_ = std::make_shared<sf::Texture>();
-   explodeGreatTexture_ = std::make_shared<sf::Texture>();
-   explodeGoodTexture_ = std::make_shared<sf::Texture>();
-
-   pulseTexture_->loadFromFile(pulseTextureFile);
-   disappearTexture_->loadFromFile(disappearTextureFile);
-   explodeGreatTexture_->loadFromFile(explodeGreatTextureFile);
-   explodeGoodTexture_->loadFromFile(explodeGoodTextureFile);
+   pulseTexture_.loadFromFile(pulseTextureFile);
+   disappearTexture_.loadFromFile(disappearTextureFile);
+   explodeGreatTexture_.loadFromFile(explodeGreatTextureFile);
+   explodeGoodTexture_.loadFromFile(explodeGoodTextureFile);
 }
 
 // ********************************************************************************
@@ -72,9 +67,9 @@ std::string KeyChart::getGenre() const
 void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture)
 {
    std::fstream keyChartFile(fileName);
-   auto metaContents = getSectionContents("meta", keyChartFile);
-   auto readableContents = getSectionContents("readable", keyChartFile);
-   auto importableContents = getSectionContents("importable", keyChartFile);
+   std::vector<std::string> metaContents = getSectionContents("meta", keyChartFile);
+   std::vector<std::string> readableContents = getSectionContents("readable", keyChartFile);
+   std::vector<std::string> importableContents = getSectionContents("importable", keyChartFile);
 
    std::tie(songFile_, title_, artist_, genre_) = parseMeta(metaContents);
    if (importableContents.empty()) {
@@ -237,14 +232,16 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
             // error: BPM or BPL not yet set
          }
          else {
-            float keyNoteInterval = (60000000.0f / bpm.value() * bpl.value()) / line.size();
+            // the time in microseconds between KeyNotes represented on the current line
+            float dt = (60000000.0f / (*bpm) * (*bpl)) / line.size();
+
             for (char c : line) {
                if (c >= 'A' && c <= 'Z') {
                   std::ostringstream oss;
                   oss << c << " " << static_cast<sf::Int64>(microsecondTime);
                   result.push_back(oss.str());
                }
-               microsecondTime += keyNoteInterval;
+               microsecondTime += dt;
             }
          }
       }
@@ -253,15 +250,21 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    return result;
 }
 
-// TODO: clean up this interface
-// TODO: handle poor input (e.g., negative target hit times, bad characters)
+// ********************************************************************************
+/// <summary>
+/// Parses the contents of the importable section and populates data with all
+/// relevant properties of the KeyNotes within the KeyChart
+/// </summary>
+/// <changed>tblock,04/11/2022</changed>
+// ********************************************************************************
 void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
                                sf::Texture &initTexture)
 {
+   // TODO: clean up this interface
+   // TODO: handle poor input (e.g., negative target hit times, bad characters)
    data.xs_.clear();
    data.ys_.clear();
    data.speeds_.clear();
-   data.hitTimes_.clear();
    data.targetHitTimes_.clear();
    data.appearTimes_.clear();
    data.disappearTimes_.clear();
@@ -289,22 +292,22 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
             speedMultiplier = defaultSpeedMultiplier;
          }
 
-         sf::Uint32 offscreenLoadTime = 0;
-         if (targetHitTime
-             > static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed))) {
-            offscreenLoadTime
-                = targetHitTime
-                  - static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / (speedMultiplier * keyNoteSpeed));
-         }
-         sf::Uint32 offscreenUnloadTime
-             = targetHitTime + static_cast<sf::Uint32>(fullscreenWidth / (speedMultiplier * keyNoteSpeed));
+         float note_speed = speedMultiplier * keyNoteSpeed;
+         sf::Uint32 prehit_duration = static_cast<sf::Uint32>((fullscreenWidth + pixelThreshold) / note_speed);
+         sf::Uint32 postmiss_duration = static_cast<sf::Uint32>(fullscreenWidth / note_speed);
 
-         data.xs_.emplace_back(targetHitTime * (speedMultiplier * keyNoteSpeed) + zoneLeftBound);
+         sf::Uint32 offscreenLoadTime = 0;
+         if (targetHitTime > prehit_duration) {
+            offscreenLoadTime = targetHitTime - prehit_duration;
+         }
+         sf::Uint32 offscreenUnloadTime = targetHitTime + postmiss_duration;
+
+         // at t = 0, the note should be placed such that it reaches zoneLeftBound by its targetHitTime
+         data.xs_.emplace_back((targetHitTime - 0) * note_speed + zoneLeftBound);
          data.ys_.emplace_back(charToY(c));
-         data.speeds_.emplace_back(speedMultiplier * keyNoteSpeed);
-         data.hitTimes_.emplace_back(0);
+         data.speeds_.emplace_back(note_speed);
          data.targetHitTimes_.emplace_back(targetHitTime);
-         data.appearTimes_.emplace_back(offscreenLoadTime);
+         data.appearTimes_.emplace_back(offscreenLoadTime);  // TODO: sort by appear times
          data.disappearTimes_.emplace_back(offscreenUnloadTime);
          data.missTimes_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
          data.states_.emplace_back(KeyNoteState::LIVE);
@@ -318,6 +321,14 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
    }
 }
 
+// ********************************************************************************
+/// <summary>
+/// Maps each character to a y-position, based on the QWERTY keyboard.
+/// </summary>
+/// <returns>The y-position, in pixels, where the KeyNote with this character
+/// should be placed.</returns>
+/// <changed>tblock,04/11/2022</changed>
+// ********************************************************************************
 float KeyChart::charToY(char c)
 {
    sf::Uint32 track = 0;

@@ -18,16 +18,11 @@ class KeyChart {
    KeyChart();
 
    std::string getSongFile() const;
-
    std::string getTitle() const;
-
    std::string getArtist() const;
-
    std::string getGenre() const;
 
    void importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture);
-
-   void fillData(DataKeyNotes &data);
 
   private:
    std::string songFile_;
@@ -35,10 +30,10 @@ class KeyChart {
    std::string artist_;
    std::string genre_;
 
-   std::shared_ptr<sf::Texture> pulseTexture_;
-   std::shared_ptr<sf::Texture> disappearTexture_;
-   std::shared_ptr<sf::Texture> explodeGreatTexture_;
-   std::shared_ptr<sf::Texture> explodeGoodTexture_;
+   sf::Texture pulseTexture_;
+   sf::Texture disappearTexture_;
+   sf::Texture explodeGreatTexture_;
+   sf::Texture explodeGoodTexture_;
 
    std::vector<std::string> getSectionContents(std::string section, std::fstream &fin);
 

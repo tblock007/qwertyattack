@@ -7,8 +7,9 @@ namespace qa {
 /// </summary>
 /// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
-JudgementTally::JudgementTally() : greats_(0), goods_(0), misses_(0)
+JudgementTally::JudgementTally()
 {
+   reset();
 }
 
 // ********************************************************************************
@@ -18,9 +19,9 @@ JudgementTally::JudgementTally() : greats_(0), goods_(0), misses_(0)
 /// <returns>The number of GREATs, the number of GOODs, the number of MISSes</returns>
 /// <changed>tblock,11/19/2018</changed>
 // ********************************************************************************
-std::tuple<sf::Int32, sf::Int32, sf::Int32> JudgementTally::getTallies() const
+TallyCounts JudgementTally::getTallies() const
 {
-   return {greats_, goods_, misses_};
+   return counts_;
 }
 
 // ********************************************************************************
@@ -33,13 +34,13 @@ std::tuple<sf::Int32, sf::Int32, sf::Int32> JudgementTally::getTallies() const
 void JudgementTally::incrementTally(Judgement judgement)
 {
    if (judgement == Judgement::GREAT) {
-      greats_++;
+      counts_.greats++;
    }
    else if (judgement == Judgement::GOOD) {
-      goods_++;
+      counts_.goods++;
    }
    else if (judgement == Judgement::MISS) {
-      misses_++;
+      counts_.misses++;
    }
 }
 
@@ -51,9 +52,9 @@ void JudgementTally::incrementTally(Judgement judgement)
 // ********************************************************************************
 void JudgementTally::reset()
 {
-   greats_ = 0;
-   goods_ = 0;
-   misses_ = 0;
+   counts_.greats = 0;
+   counts_.goods = 0;
+   counts_.misses = 0;
 }
 
 }  // namespace qa

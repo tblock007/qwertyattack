@@ -23,7 +23,6 @@ SongRun::SongRun()
    bg_.setPosition(0, 0);
 }
 
-
 // rename
 void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
 {
@@ -74,8 +73,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       float fps = 1000000.0f / dt;
       /*if (frameCounter % 1000 == 0) {
          std::cout << "FPS: " << fps << std::endl;
-	  }*/
-
+      }*/
 
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
@@ -85,7 +83,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
 
       auto [greats, goods, misses] = scoreboard.getTallies();
       scoreboardText_.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods)
-                               + "\nMISSES: " + std::to_string(misses));
+                                + "\nMISSES: " + std::to_string(misses));
 
       // render the frame
       window.clear();

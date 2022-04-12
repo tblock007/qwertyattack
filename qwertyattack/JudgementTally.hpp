@@ -8,19 +8,29 @@ namespace qa {
 /// Represents counts for all judgements received in a SongRun
 /// </summary>
 // --------------------------------------------------------------------------------
+struct TallyCounts {
+   sf::Int32 greats;
+   sf::Int32 goods;
+   sf::Int32 misses;
+};
+
+
+// --------------------------------------------------------------------------------
+/// <summary>
+/// Represents counts for all judgements received in a SongRun
+/// </summary>
+// --------------------------------------------------------------------------------
 class JudgementTally {
   public:
    JudgementTally();
 
-   std::tuple<sf::Int32, sf::Int32, sf::Int32> getTallies() const;
+   [[nodiscard]] TallyCounts getTallies() const;
 
    void incrementTally(Judgement judgement);
 
    void reset();
 
   private:
-   sf::Int32 greats_;
-   sf::Int32 goods_;
-   sf::Int32 misses_;
+   TallyCounts counts_;
 };
 }  // namespace qa
