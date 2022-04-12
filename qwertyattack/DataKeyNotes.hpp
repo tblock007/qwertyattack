@@ -25,9 +25,9 @@ class DataKeyNotes : public sf::Drawable {
   private:
    friend class KeyChart;
 
-   // the head and tail indices (inclusive) of the relevant range of the KeyNotes (i.e.,
-   // those close enough to being displayed); the main game loop only needs to render and
-   // process this range
+   // the head and tail indices of the relevant range of the KeyNotes (i.e., the KeyNotes
+   // close enough to being displayed are [head, tail)); the main game loop only needs to
+   // render and process this range
    size_t head_ = 0;
    size_t tail_ = 0;
 
