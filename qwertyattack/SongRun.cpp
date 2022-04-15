@@ -31,6 +31,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
    pulseTexture.loadFromFile(pulseTextureFile);
 
    DataKeyNotes data;
+   Judgements judgements;
    JudgementTally scoreboard;
    KeyChart chart;
    chart.importFile(keyChartFilePath, true, data, pulseTexture);
@@ -77,9 +78,10 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
 
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
+      judgements.update(usElapsed);
       data.updateDelimiters(usElapsed);
       data.updatePositions(usElapsed);
-      data.updateStates(usElapsed, scoreboard, keys);
+      data.updateStates(usElapsed, judgements, scoreboard, keys);
 
       auto [greats, goods, misses] = scoreboard.getTallies();
       scoreboardText_.setString("Scoreboard\nGREAT: " + std::to_string(greats) + "\nGOOD: " + std::to_string(goods)
@@ -88,6 +90,7 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       // render the frame
       window.clear();
       window.draw(bg_);
+      window.draw(judgements);
       window.draw(data);
       window.draw(scoreboardText_);
       window.display();

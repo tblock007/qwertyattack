@@ -8,6 +8,8 @@ set(SOURCE_FILES
 		common.hpp
 		DataKeyNotes.hpp
 		DataKeyNotes.cpp
+		Judgements.hpp
+		Judgements.cpp
 		JudgementTally.hpp
 		JudgementTally.cpp
 		KeyChart.hpp

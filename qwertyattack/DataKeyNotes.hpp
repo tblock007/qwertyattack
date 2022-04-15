@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Judgements.hpp"
 #include "JudgementTally.hpp"
 #include "KeyPresses.hpp"
 #include "SFML/Graphics.hpp"
@@ -19,7 +20,7 @@ class DataKeyNotes : public sf::Drawable {
   public:
    void updateDelimiters(sf::Uint32 usElapsed);
    void updatePositions(sf::Uint32 usElapsed);
-   void updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys);
+   void updateStates(sf::Uint32 usElapsed, Judgements &judgements, JudgementTally& tally, KeyPresses& keys);
    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   private:

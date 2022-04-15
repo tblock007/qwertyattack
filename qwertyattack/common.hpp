@@ -46,6 +46,14 @@ static std::string const disappearTextureFile = "resources/keynotes/keynote_disa
 static std::string const explodeGreatTextureFile = "resources/keynotes/explode_great.png";
 static std::string const explodeGoodTextureFile = "resources/keynotes/explode_good.png";
 
+// Constants that dictate how judgements are shown on screen.
+// They should be shown within the zone, just above each track.
+static std::string const judgementGreatTextureFile = "resources/ui/judgement_great.png";
+static std::string const judgementGoodTextureFile = "resources/ui/judgement_good.png";
+static float constexpr judgementOffsetFromTrack = 20.0f;
+static float constexpr judgementFloatSpeed = 0.0001f;  // pixels per microsecond
+static sf::Uint32 constexpr judgementDisplayDuration = 200000;  // microseconds
+
 static inline void ltrim(std::string& s)
 {
    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int c) { return !std::isspace(c); }));

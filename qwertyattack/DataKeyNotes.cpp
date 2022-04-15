@@ -43,7 +43,7 @@ void DataKeyNotes::updatePositions(sf::Uint32 usElapsed)
 /// </summary>
 /// <changed>tblock,04/11/2022</changed>
 // ********************************************************************************
-void DataKeyNotes::updateStates(sf::Uint32 usElapsed, JudgementTally& tally, KeyPresses& keys)
+void DataKeyNotes::updateStates(sf::Uint32 usElapsed, Judgements& judgements, JudgementTally& tally, KeyPresses& keys)
 {
    for (size_t i = head_; i < tail_; i++) {
       if (usElapsed > missTimes_[i] && states_[i] == KeyNoteState::LIVE) {
@@ -56,9 +56,11 @@ void DataKeyNotes::updateStates(sf::Uint32 usElapsed, JudgementTally& tally, Key
             states_[i] = KeyNoteState::DEAD;  // TODO: set this to exploding animation
 
             if (usDiff >= minMicrosecondGreat && usDiff <= maxMicrosecondGreat) {
+               judgements.addJudgement(Judgement::GREAT, ys_[i], usElapsed);
                tally.incrementTally(Judgement::GREAT);
             }
             else {
+               judgements.addJudgement(Judgement::GOOD, ys_[i], usElapsed);
                tally.incrementTally(Judgement::GOOD);
             }
             keys.resetPressed(keys_[i]);

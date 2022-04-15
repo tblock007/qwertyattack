@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include "DataKeyNotes.hpp"
+#include "Judgements.hpp"
 #include "JudgementTally.hpp"
 #include "KeyChart.hpp"
 #include "KeyPresses.hpp"
