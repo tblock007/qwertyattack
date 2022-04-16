@@ -6,6 +6,7 @@
 #include "JudgementTally.hpp"
 #include "Judgements.hpp"
 #include "KeyPresses.hpp"
+#include "utility.hpp"
 
 namespace qa {
 

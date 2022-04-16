@@ -9,7 +9,8 @@
 #include <vector>
 
 #include "DataKeyNotes.hpp"
-#include "common.hpp"
+#include "constants.hpp"
+#include "utility.hpp"
 
 namespace qa {
 

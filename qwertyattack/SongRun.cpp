@@ -9,7 +9,7 @@
 #include "Judgements.hpp"
 #include "KeyChart.hpp"
 #include "KeyPresses.hpp"
-#include "common.hpp"
+#include "constants.hpp"
 
 namespace qa {
 

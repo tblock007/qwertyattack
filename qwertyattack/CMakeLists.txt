@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-build-release/)
 
 set(SOURCE_FILES
-		common.hpp
+		constants.hpp
 		DataKeyNotes.hpp
 		DataKeyNotes.cpp
 		Judgements.hpp
@@ -17,7 +17,8 @@ set(SOURCE_FILES
 		KeyPresses.hpp 
 		KeyPresses.cpp
 		SongRun.hpp
-		SongRun.cpp)
+		SongRun.cpp
+        utility.hpp)
 
 set(TEST_SOURCE_FILES
 		tests/catch.hpp

@@ -4,7 +4,7 @@
 #include <deque>
 
 #include "JudgementTally.hpp"
-#include "common.hpp"
+#include "constants.hpp"
 
 namespace qa {
 
