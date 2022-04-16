@@ -17,14 +17,14 @@ TEST_CASE("JudgementTally Increment and Reset", "[judgementtally]")
 {
    JudgementTally eut;
 
-   eut.incrementTally(Judgement::GREAT);
-   eut.incrementTally(Judgement::GREAT);
-   eut.incrementTally(Judgement::GREAT);
-   eut.incrementTally(Judgement::GREAT);
-   eut.incrementTally(Judgement::GREAT);
-   eut.incrementTally(Judgement::GOOD);
-   eut.incrementTally(Judgement::GOOD);
-   eut.incrementTally(Judgement::MISS);
+   eut.incrementTally(JudgementTally::Judgement::GREAT);
+   eut.incrementTally(JudgementTally::Judgement::GREAT);
+   eut.incrementTally(JudgementTally::Judgement::GREAT);
+   eut.incrementTally(JudgementTally::Judgement::GREAT);
+   eut.incrementTally(JudgementTally::Judgement::GREAT);
+   eut.incrementTally(JudgementTally::Judgement::GOOD);
+   eut.incrementTally(JudgementTally::Judgement::GOOD);
+   eut.incrementTally(JudgementTally::Judgement::MISS);
       
    auto const [greats, goods, misses] = eut.getTallies();
 

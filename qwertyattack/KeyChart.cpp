@@ -1,69 +1,38 @@
 #include "KeyChart.hpp"
 
-namespace qa {
-// ********************************************************************************
-/// <summary>
-/// Constructor for KeyChart.  Loads the textures from file.
-/// </summary>
-/// <changed>tblock,11/20/2018</changed>
-// ********************************************************************************
-KeyChart::KeyChart()
-{
-   pulseTexture_.loadFromFile(pulseTextureFile);
-   disappearTexture_.loadFromFile(disappearTextureFile);
-   explodeGreatTexture_.loadFromFile(explodeGreatTextureFile);
-   explodeGoodTexture_.loadFromFile(explodeGoodTextureFile);
-}
+#include <SFML/Graphics.hpp>
+#include <fstream>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
 
-// ********************************************************************************
-/// <summary>
-/// Getter method for song file of the KeyChart
-/// </summary>
-/// <returns>The song file of the KeyChart</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
+#include "DataKeyNotes.hpp"
+#include "common.hpp"
+
+namespace qa {
+
 std::string KeyChart::getSongFile() const
 {
    return songFile_;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Getter method for title of the KeyChart
-/// </summary>
-/// <returns>The title of the KeyChart</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::string KeyChart::getTitle() const
 {
    return title_;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Getter method for the artist of the KeyChart
-/// </summary>
-/// <returns>The artist of the KeyChart</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::string KeyChart::getArtist() const
 {
    return artist_;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Getter method for the genre of the KeyChart
-/// </summary>
-/// <returns>The genre of the KeyChart</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::string KeyChart::getGenre() const
 {
    return genre_;
 }
 
-// TODO: clean up this interface
 void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture)
 {
    std::fstream keyChartFile(fileName);
@@ -81,15 +50,6 @@ void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNot
    parseImportable(importableContents, data, initTexture);
 }
 
-// ********************************************************************************
-/// <summary>
-/// Auxiliary function for retrieving an entire section of a .kc file from an input file stream
-/// </summary>
-/// <param name="sectionName">The section to retrieve (case sensitive)</param>
-/// <param name="fin">The input file stream from which to fetch the section</param>
-/// <returns>A vector of lines with all the contents of the requested section</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, std::fstream &fin)
 {
    std::vector<std::string> result;
@@ -115,15 +75,6 @@ std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, s
    return result;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Appends a KeyChart section to an open output file stream
-/// </summary>
-/// <param name="fout">An open file stream</param>
-/// <param name="section">The title of the section</param>
-/// <param name="contents">The contents of the section</param>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 void KeyChart::appendContents(std::ofstream &fout, std::string section, std::vector<std::string> const &contents)
 {
    fout << ".BEGIN " << section << std::endl;
@@ -133,12 +84,6 @@ void KeyChart::appendContents(std::ofstream &fout, std::string section, std::vec
    fout << ".END " << section << std::endl << std::endl;
 }
 
-// --------------------------------------------------------------------------------
-/// <summary>
-/// Rewrites the KeyChart file with the contents of each section.  This should be used after
-/// readable section is parsed to create the importable section.
-/// </summary>
-// --------------------------------------------------------------------------------
 void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string> const &metaContents,
                                    std::vector<std::string> const &readableContents,
                                    std::vector<std::string> const &importableContents)
@@ -149,15 +94,6 @@ void KeyChart::rewriteKeyChartFile(std::string fileName, std::vector<std::string
    appendContents(keyChartFile, "importable", importableContents);
 }
 
-// ********************************************************************************
-/// <summary>
-/// Parses the contents of the meta section of the KeyChart file to extract song file, title,
-/// artist, and genre information
-/// </summary>
-/// <param name="metaContents">The lines read from the meta section</param>
-/// <returns>The song file name, the title, the artist, the genre</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMeta(
     std::vector<std::string> const &metaContents)
 {
@@ -183,15 +119,6 @@ std::tuple<std::string, std::string, std::string, std::string> KeyChart::parseMe
    return {songFile, title, artist, genre};
 }
 
-// ********************************************************************************
-/// <summary>
-/// Parses the contents of the readable section of the KeyChart file to generate the
-/// actual importable section
-/// </summary>
-/// <param name="readableContents">The lines read from the readable section</param>
-/// <returns>The contents of the importable section that can be written</returns>
-/// <changed>tblock,11/18/2018</changed>
-// ********************************************************************************
 std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const &readableContents)
 {
    std::vector<std::string> result;
@@ -250,13 +177,6 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    return result;
 }
 
-// ********************************************************************************
-/// <summary>
-/// Parses the contents of the importable section and populates data with all
-/// relevant properties of the KeyNotes within the KeyChart
-/// </summary>
-/// <changed>tblock,04/11/2022</changed>
-// ********************************************************************************
 void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
                                sf::Texture &initTexture)
 {
@@ -265,10 +185,10 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
    data.xs_.clear();
    data.ys_.clear();
    data.speeds_.clear();
-   data.targetHitTimes_.clear();
-   data.appearTimes_.clear();
-   data.disappearTimes_.clear();
-   data.missTimes_.clear();
+   data.usHitTarget_.clear();
+   data.usAppearance_.clear();
+   data.usDisappearance_.clear();
+   data.usMiss_.clear();
    data.states_.clear();
    data.keys_.clear();
    data.sprites_.clear();
@@ -306,11 +226,11 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          data.xs_.emplace_back((targetHitTime - 0) * note_speed + zoneLeftBound);
          data.ys_.emplace_back(charToY(c));
          data.speeds_.emplace_back(note_speed);
-         data.targetHitTimes_.emplace_back(targetHitTime);
-         data.appearTimes_.emplace_back(offscreenLoadTime);  // TODO: sort by appear times
-         data.disappearTimes_.emplace_back(offscreenUnloadTime);
-         data.missTimes_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
-         data.states_.emplace_back(KeyNoteState::LIVE);
+         data.usHitTarget_.emplace_back(targetHitTime);
+         data.usAppearance_.emplace_back(offscreenLoadTime);  // TODO: sort by appear times
+         data.usDisappearance_.emplace_back(offscreenUnloadTime);
+         data.usMiss_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
+         data.states_.emplace_back(DataKeyNotes::State::LIVE);
          data.keys_.emplace_back(c);
          data.sprites_.emplace_back(
              initTexture, sf::IntRect(leftOffset + ((c - 'A') * pixelsBetweenSprites), topOffset, width, height));
@@ -321,14 +241,6 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
    }
 }
 
-// ********************************************************************************
-/// <summary>
-/// Maps each character to a y-position, based on the QWERTY keyboard.
-/// </summary>
-/// <returns>The y-position, in pixels, where the KeyNote with this character
-/// should be placed.</returns>
-/// <changed>tblock,04/11/2022</changed>
-// ********************************************************************************
 float KeyChart::charToY(char c)
 {
    sf::Uint32 track = 0;

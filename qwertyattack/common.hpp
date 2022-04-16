@@ -4,12 +4,10 @@
 #include <cctype>
 
 namespace qa {
-enum class KeyNoteState { LIVE, DEAD, DISAPPEARING, MISSED, SEQUENCE_IN_PROGRESS };
-enum class Judgement { GREAT, GOOD, MISS };
 
 // TODO: organize these - perhaps an entity that stores global configuration parameters
 
-static unsigned int constexpr frameLimit = 144;
+static sf::Uint32 constexpr frameLimit = 144;
 
 static sf::Uint32 constexpr pixelThreshold
     = 640;  // buffer half a screen of KeyNotes (technically a problem if KeyNotes start travelling too fast)
@@ -51,7 +49,7 @@ static std::string const explodeGoodTextureFile = "resources/keynotes/explode_go
 static std::string const judgementGreatTextureFile = "resources/ui/judgement_great.png";
 static std::string const judgementGoodTextureFile = "resources/ui/judgement_good.png";
 static float constexpr judgementOffsetFromTrack = 20.0f;
-static float constexpr judgementFloatSpeed = 0.0001f;  // pixels per microsecond
+static float constexpr judgementFloatSpeed = 0.0001f;           // pixels per microsecond
 static sf::Uint32 constexpr judgementDisplayDuration = 200000;  // microseconds
 
 static inline void ltrim(std::string& s)

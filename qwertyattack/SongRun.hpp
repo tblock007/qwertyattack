@@ -1,16 +1,6 @@
 #pragma once
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <bitset>
-#include <iostream>
-#include <vector>
-#include "DataKeyNotes.hpp"
-#include "Judgements.hpp"
-#include "JudgementTally.hpp"
-#include "KeyChart.hpp"
-#include "KeyPresses.hpp"
-#include "common.hpp"
+#include <string>
 
 namespace qa {
 // --------------------------------------------------------------------------------
@@ -22,13 +12,23 @@ namespace qa {
 // --------------------------------------------------------------------------------
 class SongRun {
   public:
+   // ********************************************************************************
+   /// <summary>
+   /// Constructs a new instance of a KeyPresses, loading in graphics resources.
+   /// </summary>
+   // ********************************************************************************
    SongRun();
+
+   // ********************************************************************************
+   /// <summary>
+   /// Runs the song, allowing the user to play.
+   /// </summary>
+   /// <param name="keyChartFilePath">The path to the .kc file containing the KeyChart.</param>
+   /// <param name="window">The window in which to run the game.</param>
+   // ********************************************************************************
    void run(std::string keyChartFilePath, sf::RenderWindow &window);
 
   private:
-   sf::Font fpsFont_;
-   sf::Text fpsText_;
-   sf::Text scoreboardText_;
    sf::Texture bgTexture_;
    sf::Sprite bg_;
 };
