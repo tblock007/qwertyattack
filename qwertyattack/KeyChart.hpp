@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "DataKeyNotes.hpp"
+#include "TextNoteQueue.hpp"
 #include "constants.hpp"
 
 namespace qa {
@@ -56,10 +57,12 @@ class KeyChart {
    /// <param name="fileName">The path to the .kc file.</param>
    /// <param name="writeImportable">True if the "importable" section of the KeyChart
    /// should be written based on the "readable" section.</param>
-   /// <param name="data">The DataKeyNotes object into which to import Keynotes.</param>
+   /// <param name="keynotes">The DataKeyNotes object into which to import Keynotes.</param>
+   /// <param name="textnotes">The TextNoteQueue object into which to import Textnotes.</param>
    /// <param name="initTexture">The Texture used to display KeyNotes.</param>
    // ********************************************************************************
-   void importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture);
+   void importFile(std::string fileName, bool writeImportable, DataKeyNotes &keynotes, TextNoteQueue &textnotes,
+                   sf::Texture &initTexture);
 
   private:
    // Reads in the named section from an fstream.
@@ -85,8 +88,8 @@ class KeyChart {
 
    // Parses the contents of the importable section and populates data with all
    /// relevant properties of the KeyNotes within the KeyChart.
-   void parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
-                        sf::Texture &initTexture);
+   void parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &keynotes,
+                        TextNoteQueue &textnotes, sf::Texture &initTexture);
 
    // TODO: move this to a better place?
    // Maps each character to a y-position, based on the QWERTY keyboard.

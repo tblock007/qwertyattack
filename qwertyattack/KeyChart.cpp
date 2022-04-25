@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "DataKeyNotes.hpp"
+#include "TextNoteQueue.hpp"
 #include "constants.hpp"
 #include "utility.hpp"
 
@@ -34,7 +35,7 @@ std::string KeyChart::getGenre() const
    return genre_;
 }
 
-void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes &data, sf::Texture &initTexture)
+void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNotes &keynotes, TextNoteQueue &textnotes, sf::Texture &initTexture)
 {
    std::fstream keyChartFile(fileName);
    std::vector<std::string> metaContents = getSectionContents("meta", keyChartFile);
@@ -48,7 +49,7 @@ void KeyChart::importFile(std::string fileName, bool writeImportable, DataKeyNot
          rewriteKeyChartFile(fileName, metaContents, readableContents, importableContents);
       }
    }
-   parseImportable(importableContents, data, initTexture);
+   parseImportable(importableContents, keynotes, textnotes, initTexture);
 }
 
 std::vector<std::string> KeyChart::getSectionContents(std::string sectionName, std::fstream &fin)
@@ -178,21 +179,21 @@ std::vector<std::string> KeyChart::parseReadable(std::vector<std::string> const 
    return result;
 }
 
-void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &data,
-                               sf::Texture &initTexture)
+void KeyChart::parseImportable(std::vector<std::string> const &importableContents, DataKeyNotes &keynotes,
+                               TextNoteQueue &textnotes, sf::Texture &initTexture)
 {
    // TODO: clean up this interface
    // TODO: handle poor input (e.g., negative target hit times, bad characters)
-   data.xs_.clear();
-   data.ys_.clear();
-   data.speeds_.clear();
-   data.usHitTarget_.clear();
-   data.usAppearance_.clear();
-   data.usDisappearance_.clear();
-   data.usMiss_.clear();
-   data.states_.clear();
-   data.keys_.clear();
-   data.sprites_.clear();
+   keynotes.xs_.clear();
+   keynotes.ys_.clear();
+   keynotes.speeds_.clear();
+   keynotes.usHitTarget_.clear();
+   keynotes.usAppearance_.clear();
+   keynotes.usDisappearance_.clear();
+   keynotes.usMiss_.clear();
+   keynotes.states_.clear();
+   keynotes.keys_.clear();
+   keynotes.sprites_.clear();
 
    float defaultSpeedMultiplier = 1.0f;
    for (auto &&line : importableContents) {
@@ -224,17 +225,26 @@ void KeyChart::parseImportable(std::vector<std::string> const &importableContent
          sf::Uint32 offscreenUnloadTime = targetHitTime + postmiss_duration;
 
          // at t = 0, the note should be placed such that it reaches zoneLeftBound by its targetHitTime
-         data.xs_.emplace_back((targetHitTime - 0) * note_speed + zoneLeftBound);
-         data.ys_.emplace_back(charToY(c));
-         data.speeds_.emplace_back(note_speed);
-         data.usHitTarget_.emplace_back(targetHitTime);
-         data.usAppearance_.emplace_back(offscreenLoadTime);  // TODO: sort by appear times
-         data.usDisappearance_.emplace_back(offscreenUnloadTime);
-         data.usMiss_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
-         data.states_.emplace_back(DataKeyNotes::State::LIVE);
-         data.keys_.emplace_back(c);
-         data.sprites_.emplace_back(
+         keynotes.xs_.emplace_back((targetHitTime - 0) * note_speed + zoneLeftBound);
+         keynotes.ys_.emplace_back(charToY(c));
+         keynotes.speeds_.emplace_back(note_speed);
+         keynotes.usHitTarget_.emplace_back(targetHitTime);
+         keynotes.usAppearance_.emplace_back(offscreenLoadTime);  // TODO: sort by appear times
+         keynotes.usDisappearance_.emplace_back(offscreenUnloadTime);
+         keynotes.usMiss_.emplace_back(targetHitTime + static_cast<sf::Uint32>(maxMicrosecondGood));
+         keynotes.states_.emplace_back(DataKeyNotes::State::LIVE);
+         keynotes.keys_.emplace_back(c);
+         keynotes.sprites_.emplace_back(
              initTexture, sf::IntRect(leftOffset + ((c - 'A') * pixelsBetweenSprites), topOffset, width, height));
+      }
+      else if (firstToken == "[]") {
+         sf::Uint32 startTime;
+         sf::Uint32 endTime;
+         iss >> startTime >> endTime >> std::ws;
+
+         std::string text;
+         getline(iss, text);
+         textnotes.addTextNote(text, startTime, endTime);
       }
       else {
          // error: invalid line in importable

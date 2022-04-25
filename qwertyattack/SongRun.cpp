@@ -9,6 +9,7 @@
 #include "Judgements.hpp"
 #include "KeyChart.hpp"
 #include "KeyPresses.hpp"
+#include "TextNoteQueue.hpp"
 #include "constants.hpp"
 
 namespace qa {
@@ -26,11 +27,12 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
    sf::Texture pulseTexture;
    pulseTexture.loadFromFile(pulseTextureFile);
 
-   DataKeyNotes data;
+   DataKeyNotes keynotes;
+   TextNoteQueue textnotes;
    Judgements judgements;
    JudgementTally scoreboard;
    KeyChart chart;
-   chart.importFile(keyChartFilePath, true, data, pulseTexture);
+   chart.importFile(keyChartFilePath, true, keynotes, textnotes, pulseTexture);
 
    sf::Music music;
    music.openFromFile("resources/songs/" + chart.getSongFile());
@@ -64,15 +66,17 @@ void SongRun::run(std::string keyChartFilePath, sf::RenderWindow& window)
       sf::Uint32 usElapsed = static_cast<sf::Uint32>(overallClock.getElapsedTime().asMicroseconds());
 
       judgements.update(usElapsed);
-      data.updateDelimiters(usElapsed);
-      data.updatePositions(usElapsed);
-      data.updateStates(usElapsed, judgements, scoreboard, keys);
+      keynotes.updateDelimiters(usElapsed);
+      keynotes.updatePositions(usElapsed);
+      keynotes.updateStates(usElapsed, judgements, scoreboard, keys);
+      textnotes.update(usElapsed, judgements, scoreboard, keys);
 
       // Render the frame.
       window.clear();
       window.draw(bg_);
       window.draw(judgements);
-      window.draw(data);
+      window.draw(keynotes);
+      window.draw(textnotes);
       window.display();
    }
 }
