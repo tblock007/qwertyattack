@@ -9,11 +9,19 @@
 namespace qa {
 // --------------------------------------------------------------------------------
 /// <summary>
-/// Container of judgements to be displayed on the screen.
+/// Represents a TextNote, a gameplay element in which the user needs to type a
+/// string without timing constraints.
 /// </summary>
 // --------------------------------------------------------------------------------
 class TextNote : public sf::Drawable {
   public:
+   // ********************************************************************************
+   /// <summary>
+   /// Possible states for a TextNote.
+   /// </summary>
+   // ********************************************************************************
+   enum class TextNoteState { INACTIVE, ACTIVE, EXPIRED };
+
    // ********************************************************************************
    /// <summary>
    /// Constructs a TextNote with the given target text.
@@ -52,6 +60,14 @@ class TextNote : public sf::Drawable {
    // ********************************************************************************
    bool isActive() const;
 
+   // ********************************************************************************
+   /// <summary>
+   /// Returns whether the TextNote is expired.
+   /// </summary>
+   /// <returns>true iff the TextNote is still expired.</returns>
+   // ********************************************************************************
+   bool isExpired() const;
+
   private:
    // The time window in which the user must type the target text.
    sf::Uint32 start_time_;
@@ -67,7 +83,7 @@ class TextNote : public sf::Drawable {
    // The index of the next character to be typed.
    sf::Int32 next_;
 
-   // Indicates whether the TextNote is active and should be displayed.
-   bool is_active_;
+   // Indicates that stage of the TextNote's lifecycle.
+   TextNoteState state_;
 };
 }  // namespace qa

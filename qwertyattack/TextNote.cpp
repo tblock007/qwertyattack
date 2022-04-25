@@ -18,7 +18,7 @@ TextNote::TextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 en
       back_bar_({textNoteWidth, textNoteHeight}),
       remaining_bar_({textNoteWidth, textNoteHeight}),
       next_(0),
-      is_active_(true)
+      state_(TextNoteState::INACTIVE)
 {
    back_bar_.setPosition({textNoteLeftBound, textNoteTopBound});
    back_bar_.setFillColor(sf::Color(200, 200, 200));
@@ -44,6 +44,13 @@ TextNote::TextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 en
 
 void TextNote::update(sf::Uint32 usElapsed, Judgements& judgements, JudgementTally& tally, KeyPresses& keys)
 {
+   if (usElapsed >= start_time_ && usElapsed < end_time_) {
+      state_ = TextNoteState::ACTIVE;
+   }
+   if (state_ != TextNoteState::ACTIVE) {
+      return;
+   }
+
    sf::String const& s = text_.getString();
    if (char c = s[next_]; keys.isPressed(c)) {
       next_++;
@@ -54,7 +61,7 @@ void TextNote::update(sf::Uint32 usElapsed, Judgements& judgements, JudgementTal
       if (next_ >= s.getSize()) {
          judgements.addJudgement(JudgementTally::Judgement::GREAT, textNoteTopBound, usElapsed);
          tally.incrementTally(JudgementTally::Judgement::GREAT);
-         is_active_ = false;
+         state_ = TextNoteState::EXPIRED;
       }
       else {
          next_text_.setString(s[next_]);
@@ -71,7 +78,7 @@ void TextNote::update(sf::Uint32 usElapsed, Judgements& judgements, JudgementTal
    else {
       judgements.addJudgement(JudgementTally::Judgement::MISS, textNoteTopBound, usElapsed);
       tally.incrementTally(JudgementTally::Judgement::MISS);
-      is_active_ = false;
+      state_ = TextNoteState::EXPIRED;
    }
 }
 
@@ -85,7 +92,12 @@ void TextNote::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 bool TextNote::isActive() const
 {
-   return is_active_;
+   return state_ == TextNoteState::ACTIVE;
+}
+
+bool TextNote::isExpired() const
+{
+   return state_ == TextNoteState::EXPIRED;
 }
 
 }  // namespace qa

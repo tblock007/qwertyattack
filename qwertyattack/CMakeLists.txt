@@ -20,6 +20,8 @@ set(SOURCE_FILES
 		SongRun.cpp
 		TextNote.hpp
 		TextNote.cpp
+		TextNoteQueue.hpp
+		TextNoteQueue.cpp
         utility.hpp)
 
 set(TEST_SOURCE_FILES
