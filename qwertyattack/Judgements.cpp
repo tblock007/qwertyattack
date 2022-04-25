@@ -12,6 +12,7 @@ Judgements::Judgements()
 {
    great_texture_.loadFromFile(judgementGreatTextureFile);
    good_texture_.loadFromFile(judgementGoodTextureFile);
+   miss_texture_.loadFromFile(judgementMissTextureFile);
 }
 
 void Judgements::addJudgement(JudgementTally::Judgement judgement, float y, sf::Uint32 usElapsed)
@@ -26,6 +27,9 @@ void Judgements::addJudgement(JudgementTally::Judgement judgement, float y, sf::
          break;
       case JudgementTally::Judgement::GOOD:
          properties.sprite.setTexture(good_texture_);
+         break;
+      case JudgementTally::Judgement::MISS:
+         properties.sprite.setTexture(miss_texture_);
          break;
       default:
          // TODO: handle error

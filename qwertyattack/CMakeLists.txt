@@ -18,13 +18,14 @@ set(SOURCE_FILES
 		KeyPresses.cpp
 		SongRun.hpp
 		SongRun.cpp
+		TextNote.hpp
+		TextNote.cpp
         utility.hpp)
 
 set(TEST_SOURCE_FILES
 		tests/catch.hpp
 		tests/test_JudgementTally.cpp
 		tests/test_KeyChart.cpp)
-
 
 
 if(LINUX)

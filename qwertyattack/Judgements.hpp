@@ -61,5 +61,6 @@ class Judgements : public sf::Drawable {
    // Preloaded textures for displaying the judgements.
    sf::Texture great_texture_;
    sf::Texture good_texture_;
+   sf::Texture miss_texture_;
 };
 }  // namespace qa

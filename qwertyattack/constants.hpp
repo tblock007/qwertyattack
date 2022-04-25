@@ -17,15 +17,27 @@ static float constexpr keyNoteSpeed = 0.0005f;
 static sf::Uint32 constexpr pixelThreshold
     = 640;  // buffer half a screen of KeyNotes (technically a problem if KeyNotes start travelling too fast)
 static sf::Uint32 constexpr fullscreenWidth = 1280;
+static float constexpr trackOffset = 100.0f;
+static float constexpr trackDistance = 150.0f;
+static float constexpr zoneLeftBound = 40.0f;
+static float constexpr deathBound = -80.0f;
+
+// Constants describing how the TextNote gets displayed.
+static float constexpr textNoteLeftBound = 40.0f;
+static float constexpr textNoteRightBound = fullscreenWidth - textNoteLeftBound;
+static float constexpr textNoteTopBound = trackOffset + 2 * trackDistance + 80.0f + 40.0f;  // half a track distance below the field
+static float constexpr textNoteWidth = textNoteRightBound - textNoteLeftBound;
+static float constexpr textNoteHeight = 80.0f;
+static float constexpr textNoteLeftPadding = 15.0f;
+static float constexpr textNoteTopPadding = 15.0f;
+static sf::Uint32 textNoteCharacterSize = 36;
+
+// Constants describing the KeyNote sprites in the overall texture.
 static sf::Uint32 constexpr width = 80;
 static sf::Uint32 constexpr height = 80;
 static sf::Uint32 constexpr leftOffset = 25;
 static sf::Uint32 constexpr topOffset = 24;
 static sf::Uint32 constexpr pixelsBetweenSprites = 128;
-static float constexpr trackOffset = 100.0f;
-static float constexpr trackDistance = 150.0f;
-static float constexpr zoneLeftBound = 40.0f;
-static float constexpr deathBound = -80.0f;
 
 // Timing window constants. Based on frames at 60 fps.
 static sf::Int64 constexpr diffFrameGood = 4;
@@ -44,6 +56,7 @@ static std::string const pulseTextureFile = "resources/keynotes/keynote_pulse.pn
 // They should be shown within the zone, just above each track.
 static std::string const judgementGreatTextureFile = "resources/ui/judgement_great.png";
 static std::string const judgementGoodTextureFile = "resources/ui/judgement_good.png";
+static std::string const judgementMissTextureFile = "resources/ui/judgement_miss.png";
 static float constexpr judgementOffsetFromTrack = 20.0f;
 static float constexpr judgementFloatSpeed = 0.0001f;           // pixels per microsecond
 static sf::Uint32 constexpr judgementDisplayDuration = 200000;  // microseconds
