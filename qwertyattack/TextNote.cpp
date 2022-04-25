@@ -12,9 +12,9 @@
 
 namespace qa {
 
-TextNote::TextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 end_time)
-    : start_time_(start_time),
-      end_time_(end_time),
+TextNote::TextNote(std::string const& text, sf::Uint32 startTime, sf::Uint32 endTime)
+    : start_time_(startTime),
+      end_time_(endTime),
       back_bar_({textNoteWidth, textNoteHeight}),
       remaining_bar_({textNoteWidth, textNoteHeight}),
       next_(0),

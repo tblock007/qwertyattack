@@ -27,10 +27,10 @@ class TextNote : public sf::Drawable {
    /// Constructs a TextNote with the given target text.
    /// </summary>
    /// <param name="text">The text that the user must type for this TextNote.</param>
-   /// <param name="start_time">The start of the time window for this TextNote.</param>
-   /// <param name="end_time">The end of the time window for this TextNote.</param>
+   /// <param name="startTime">The start of the time window for this TextNote.</param>
+   /// <param name="endTime">The end of the time window for this TextNote.</param>
    // ********************************************************************************
-   TextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 end_time);
+   TextNote(std::string const& text, sf::Uint32 startTime, sf::Uint32 endTime);
 
    // ********************************************************************************
    /// <summary>

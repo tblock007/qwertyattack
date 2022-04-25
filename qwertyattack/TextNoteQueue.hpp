@@ -20,7 +20,7 @@ class TextNoteQueue : public sf::Drawable {
    /// <param name="start_time">The start time of the TextNote to be added.</param>
    /// <param name="end_time">The end time of the TextNote to be added.</param>
    // ********************************************************************************
-   void addTextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 end_time);
+   void addTextNote(std::string const& text, sf::Uint32 startTime, sf::Uint32 endTime);
 
    // ********************************************************************************
    /// <summary>

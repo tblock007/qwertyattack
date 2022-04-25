@@ -7,9 +7,9 @@
 
 namespace qa {
 
-void TextNoteQueue::addTextNote(std::string const& text, sf::Uint32 start_time, sf::Uint32 end_time)
+void TextNoteQueue::addTextNote(std::string const& text, sf::Uint32 startTime, sf::Uint32 endTime)
 {
-   notes_.emplace_back(text, start_time, end_time);
+   notes_.emplace_back(text, startTime, endTime);
 }
 
 void TextNoteQueue::update(sf::Uint32 usElapsed, Judgements& judgements, JudgementTally& tally, KeyPresses& keys)
